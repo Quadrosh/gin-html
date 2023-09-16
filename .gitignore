@@ -1,0 +1,26 @@
+
+go.sum
+auth.sh
+
+
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# images
+/static/img/uploads
+/uploads
+
+# env 
+config.env
+
+# buid
+/build
+
+# misc
+makefile

@@ -1,0 +1,111 @@
+{{define "base"}}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <title>SOME TITLE</title>
+        <meta name="description" content="SOME DESCRIPTION">
+
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+        <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
+       
+        <link rel="stylesheet" type="text/css" href="/static/style/base.css">
+
+
+
+        <style>
+           
+        </style>
+        {{block "css" .}}
+        {{end}}
+    </head>
+    <body >
+
+
+       <nav class="navbar navbar-expand-lg _navbar-dark _bg-transparent">
+        <!-- <a class="navbar-brand" href="#">Prime DJ</a> -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+
+            <div class="dropdown-divider"></div>
+            <li class="nav-item active">
+              <a 
+                 class="nav-link" 
+                 href="/home">Home </a>
+            </li> 
+          
+            <li class="nav-item">
+              <!-- <a 
+                 class="nav-link" 
+                 href="/djs">DJs</a> -->
+            </li>
+
+            <li class="nav-item">
+              <div class="dropdown show">
+                <a class="nav-link dropdown-toggle" 
+                   href="#" role="button" 
+                   id="dropdownMenuLink" 
+                   data-toggle="dropdown" 
+                   aria-haspopup="true" 
+                   aria-expanded="false"> DJ </a>
+              
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <a class="dropdown-item" href="/kovex">Kovex</a>
+                </div>
+              </div>
+            </li>
+          
+         
+           
+          </ul>
+         
+        </div>
+      </nav> 
+
+
+    
+
+
+
+{{block "content" .}}
+{{end}}
+   
+
+      
+       
+
+
+
+        <script src="https://unpkg.com/notie"></script>
+
+        
+        <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script> 
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+        <script src="/static/js/base.js"></script>
+    
+        {{block "js" .}}
+
+        <script>
+
+
+
+         
+    
+        </script>
+        {{end}}
+
+     
+    </body>
+    </html>
+{{end}}
+
+
