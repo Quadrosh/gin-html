@@ -7,16 +7,16 @@ import (
 )
 
 // HomePage - front home page
-// @Summary ping-pong test
-// @Description test of working server
-// @ID Ping
-// @Tags ping-pong
-// @Produce  json
+// @Summary home page
+// @Description main site home page
+// @ID HomePage
+// @Tags home page
+// @Produce  html
 // @Success 200  "Success"
-// @Router /ping [GET]
+// @Router / [GET]
 func (c *Context) HomePage(ctx *gin.Context) {
 
-	ctx.HTML(http.StatusOK, "home.page.tmpl", gin.H{
-		"title": "Main website",
+	ctx.HTML(http.StatusOK, "main.home.page.tmpl", gin.H{
+		"title": "Main HomePage()",
 	})
 }
