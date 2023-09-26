@@ -11,6 +11,7 @@ auth.sh
 !.vscode/launch.json
 !.vscode/extensions.json
 .history/*
+__debug_*
 
 # images
 /static/img/uploads
@@ -24,3 +25,4 @@ config.env
 
 # misc
 makefile
+

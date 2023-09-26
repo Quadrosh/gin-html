@@ -15,8 +15,8 @@ type CommandLine struct {
 }
 
 func (cli *CommandLine) printUsage() {
-	fmt.Println("Usage:")
-	fmt.Println(" createuser -name NAME -email EMAIL  // creates new user")
+	fmt.Println("something went wrong, command line typical usage:")
+	fmt.Println(" createuser -firstname NAME -lastname NAME -email EMAIL  // creates new user")
 
 }
 

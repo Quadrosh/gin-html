@@ -2,12 +2,15 @@ package router
 
 import (
 	"github.com/gin-contrib/secure"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/quadrosh/gin-html/controllers"
+	csrf "github.com/utrack/gin-csrf"
 )
 
 // InitRoutes инициализация доступных URL
-func InitRoutes(conx *controllers.Context) *gin.Engine {
+func InitRoutes(ctl *controllers.Controller) *gin.Engine {
 
 	ginMode := "release"
 	gin.SetMode(ginMode)
@@ -22,20 +25,33 @@ func InitRoutes(conx *controllers.Context) *gin.Engine {
 		// ContentSecurityPolicy: "default-src 'self'",
 		ReferrerPolicy: "strict-origin-when-cross-origin",
 	}))
+
+	store := cookie.NewStore([]byte("secret"))
+	router.Use(sessions.Sessions("mysession", store))
+	router.Use(csrf.Middleware(csrf.Options{
+		Secret: "secret123",
+		ErrorFunc: func(c *gin.Context) {
+			c.String(400, "CSRF token mismatch")
+			c.Abort()
+		},
+	}))
+
 	router.Use(CORSMiddleware())
+	// router.Use(middleware.ErrorHandler())
 
 	// router.Use(favicon.New("./favicon.ico"))
 
-	router.LoadHTMLGlob("templates/**/*")
-
 	router.Static("/static", "./static/")
 
-	router.GET("/ping", conx.Ping)
-	router.GET("/", conx.HomePage)
+	router.GET("/ping", ctl.Ping)
+	router.GET("/", ctl.HomePage)
+	router.GET("/password-reset/:token", ctl.PasswordResetPage)
+	router.POST("/password-reset-post/:token", ctl.PasswordResetPOST)
 
 	adminRouter := router.Group("/admin")
-	adminRouter.GET("", conx.AdminHomePage)
+	adminRouter.GET("", ctl.AdminHomePage)
 
+	ctl.Engine = router
 	return router
 }
 

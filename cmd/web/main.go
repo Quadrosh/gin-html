@@ -38,13 +38,14 @@ func RunServer(
 	app *config.AppConfig,
 ) {
 
-	ctx := &controllers.Context{
+	var ctl = &controllers.Controller{
 		App: app,
+		Db:  db,
 	}
 
 	gin.SetMode(gin.ReleaseMode)
 
-	var router = router.InitRoutes(ctx)
+	var router = router.InitRoutes(ctl)
 
 	server := &http.Server{
 		Addr:              fmt.Sprintf(":%s", app.AppPort), // host:port

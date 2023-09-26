@@ -1,0 +1,37 @@
+{{template "base" .}}
+
+
+{{define "content"}}
+
+{{$error :=  .error }}
+
+
+<div class="container">
+    <h6 class="mt-3 text-secondary">Ошибка при выполнении запроса к серверу:</h6>
+
+    {{if .code}}
+    <h6  class="text-secondary mt-2">Код: {{.code}}</h6>
+    {{end}} <!-- !if code -->
+
+    {{if $error}}
+    <h4 class="text-danger mt-1">
+       {{$error}} 
+    </h4>
+    {{end}} <!-- !if error -->
+    <br>
+    <br>
+    
+    
+</div>
+
+
+{{end}} <!-- content -->
+
+
+
+
+{{block "js" .}}{{end}}
+
+
+
+<!--  notifyModal('!',data.message,"","ОК") -->

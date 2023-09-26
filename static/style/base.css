@@ -1,10 +1,20 @@
-
+:root {
+    --main-blue-color: #3176d9;
+    --main-blue-color-darker: #2664bb;
+    --main-red-color: #D95748;
+    --main-red-color-plus: #d84231;
+}
 body{
-    background-color: black;
+    background-color: white;
 }
 h1{
-    color:white;
+    color: rgba(black,0.5);
 }
+.btn-primary{
+    background-color: var(--main-blue-color);
+    border-color: var(--main-blue-color-darker);
+}
+
 .fixedBackground {
     background-attachment: fixed;
     background-repeat: no-repeat;

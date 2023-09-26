@@ -7,7 +7,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strconv"
 
 	"github.com/joho/godotenv"
@@ -56,13 +55,8 @@ func (app *AppConfig) LoadConfig() {
 		}
 	}
 
-	var (
-		_, b, _, _  = runtime.Caller(0)
-		projectRoot = filepath.Join(filepath.Dir(b), "../..")
-	)
-	app.CWD = projectRoot
-
 	cwd, _ := os.Getwd()
+	app.CWD = cwd
 	var cwdenv = filepath.Join(cwd, fileNameConfigEnv)
 	if err != nil &&
 		len(cwdenv) != 0 {

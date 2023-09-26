@@ -1,9 +1,8 @@
 package controllers
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"github.com/quadrosh/gin-html/render"
 )
 
 // HomePage - front home page
@@ -14,9 +13,10 @@ import (
 // @Produce  html
 // @Success 200  "Success"
 // @Router / [GET]
-func (c *Context) HomePage(ctx *gin.Context) {
+func (ctl *Controller) HomePage(ctx *gin.Context) {
 
-	ctx.HTML(http.StatusOK, "main.home.page.tmpl", gin.H{
+	render.MainTemplate(ctl.App, ctl.Engine, ctx, "home.page.tmpl", ResponseMap{
 		"title": "Main HomePage()",
 	})
+
 }

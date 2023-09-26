@@ -125,7 +125,7 @@ type User struct {
 func (u *User) GetByPasswordResetToken(db *gorm.DB, token string) error {
 	err := db.
 		Where("password_reset_token = ?", token).
-		Find(u).Error
+		First(u).Error
 	if err != nil {
 		return err
 	}

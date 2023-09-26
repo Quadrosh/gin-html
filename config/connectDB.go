@@ -23,7 +23,10 @@ func ConnectDB(lConfig LocalConfig) (*gorm.DB, error) {
 		lConfig.DbPass,
 		lConfig.DbSSL)
 
-	db, err := gorm.Open(postgres.Open(connString), &gorm.Config{})
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DSN:                  connString, //  refer https://github.com/jackc/pgx
+		PreferSimpleProtocol: false,      // disables implicit prepared statement usage. By default pgx automatically uses the extended protocol
+	}), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
