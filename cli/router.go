@@ -30,47 +30,66 @@ func (cli *CommandLine) validateArgs() {
 // Run command line application
 func (cli *CommandLine) Run(db *gorm.DB) {
 
+	const (
+		createAdminCmd = "create_admin"
+		createUserCmd  = "create_user"
+		pwResetLinkCmd = "password_reset_link"
+		usersCmd       = "users"
+	)
+
 	cli.validateArgs()
 
-	createAdminCmd := flag.NewFlagSet("createadmin", flag.ExitOnError)
-	createAdminFirstName := createAdminCmd.String("firstname", "", "The first name")
-	createAdminLastName := createAdminCmd.String("lastname", "", "The last name")
-	createAdminEmail := createAdminCmd.String("email", "", "Email")
+	createAdminFlags := flag.NewFlagSet(createAdminCmd, flag.ExitOnError)
+	createAdminFirstName := createAdminFlags.String("firstname", "", "The first name")
+	createAdminLastName := createAdminFlags.String("lastname", "", "The last name")
+	createAdminEmail := createAdminFlags.String("email", "", "Email")
 
-	createUserCmd := flag.NewFlagSet("createuser", flag.ExitOnError)
-	createUserFirstName := createUserCmd.String("firstname", "", "The first name")
-	createUserLastName := createUserCmd.String("lastname", "", "The last name")
-	createUserEmail := createUserCmd.String("email", "", "Email")
+	createUserFlags := flag.NewFlagSet(createUserCmd, flag.ExitOnError)
+	createUserFirstName := createUserFlags.String("firstname", "", "The first name")
+	createUserLastName := createUserFlags.String("lastname", "", "The last name")
+	createUserEmail := createUserFlags.String("email", "", "Email")
+
+	pwResetLinkFlags := flag.NewFlagSet(pwResetLinkCmd, flag.ExitOnError)
+	pwResetLinkrEmail := pwResetLinkFlags.String("email", "", "Email")
 
 	switch os.Args[1] {
 
-	case "createadmin":
-		err := createAdminCmd.Parse(os.Args[2:])
+	case createAdminCmd:
+		err := createAdminFlags.Parse(os.Args[2:])
 		if err != nil {
 			log.Panic(err)
 		}
-	case "createuser":
-		err := createUserCmd.Parse(os.Args[2:])
+	case createUserCmd:
+		err := createUserFlags.Parse(os.Args[2:])
 		if err != nil {
 			log.Panic(err)
 		}
-
+	case pwResetLinkCmd:
+		err := pwResetLinkFlags.Parse(os.Args[2:])
+		if err != nil {
+			log.Panic(err)
+		}
+	case usersCmd: // no arguments - no flags
+		err := cli.PrintUsers(db)
+		if err != nil {
+			log.Fatal(err)
+		}
 	default:
 		cli.printUsage()
 		runtime.Goexit()
 	}
 
-	if createAdminCmd.Parsed() {
+	if createAdminFlags.Parsed() {
 		if *createAdminFirstName == "" {
-			createAdminCmd.Usage()
+			createAdminFlags.Usage()
 			runtime.Goexit()
 		}
 		if *createAdminLastName == "" {
-			createAdminCmd.Usage()
+			createAdminFlags.Usage()
 			runtime.Goexit()
 		}
 		if *createAdminEmail == "" {
-			createAdminCmd.Usage()
+			createAdminFlags.Usage()
 			runtime.Goexit()
 		}
 
@@ -80,21 +99,33 @@ func (cli *CommandLine) Run(db *gorm.DB) {
 		}
 	}
 
-	if createUserCmd.Parsed() {
+	if createUserFlags.Parsed() {
 		if *createUserFirstName == "" {
-			createUserCmd.Usage()
+			createUserFlags.Usage()
 			runtime.Goexit()
 		}
 		if *createUserLastName == "" {
-			createUserCmd.Usage()
+			createUserFlags.Usage()
 			runtime.Goexit()
 		}
 		if *createUserEmail == "" {
-			createUserCmd.Usage()
+			createUserFlags.Usage()
 			runtime.Goexit()
 		}
 
 		err := cli.createUser(db, *createUserFirstName, *createUserLastName, *createUserEmail)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	if pwResetLinkFlags.Parsed() {
+		if *pwResetLinkrEmail == "" {
+			pwResetLinkFlags.Usage()
+			runtime.Goexit()
+		}
+
+		err := cli.PasswordResetLink(db, *pwResetLinkrEmail)
 		if err != nil {
 			log.Fatal(err)
 		}

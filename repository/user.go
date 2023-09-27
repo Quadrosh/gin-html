@@ -4,6 +4,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/quadrosh/gin-html/helpers"
 	"github.com/quadrosh/gin-html/internal/utils"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -217,9 +218,33 @@ func (u *User) Can(db *gorm.DB, s UserCanSettings) bool {
 func (u *User) GetByID(db *gorm.DB, id uint32) error {
 	err := db.
 		Where("id = ?", id).
-		Find(u).Error
+		First(u).Error
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+// GetByEmail - get user by email. Fill 'u' variable
+func (u *User) GetByEmail(db *gorm.DB, email string) error {
+	err := db.
+		Where("email = ?", email).
+		First(u).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// CreatePasswordResetToken - generates password reset token and save it to db
+func (u *User) CreatePasswordResetToken(db *gorm.DB) error {
+	u.PasswordResetToken = helpers.GenerateSecureToken(15)
+	err := db.Model(&User{}).
+		Where("id = ?", u.ID).
+		Update("password_reset_token", u.PasswordResetToken).Error
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

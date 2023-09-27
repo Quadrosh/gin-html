@@ -117,3 +117,57 @@ func (cli *CommandLine) createUser(db *gorm.DB, firstName, lastName, email strin
 	return nil
 
 }
+
+// PasswordResetLink prints the password reset link by user email
+func (cli *CommandLine) PasswordResetLink(db *gorm.DB, email string) error {
+
+	var user = repository.User{}
+
+	err := db.Transaction(func(tx *gorm.DB) error {
+		if err := user.GetByEmail(tx, email); err != nil {
+			log.Printf("cant find user %v\n", err)
+			return err
+		}
+		if user.PasswordResetToken == "" {
+			fmt.Printf("password reset token is empty, creating password reset token .. \n")
+			if tErr := user.CreatePasswordResetToken(tx); tErr != nil {
+				return tErr
+			}
+		}
+		fmt.Printf("user ID %d %s, password reset link is http://localhost:%s/password-reset/%s \n",
+			user.ID,
+			user.Email,
+			os.Getenv("PORT"),
+			user.PasswordResetToken)
+
+		return nil
+	})
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return nil
+}
+
+// PrintUsers prints all users
+func (cli *CommandLine) PrintUsers(db *gorm.DB) error {
+
+	var users repository.Users
+	if err := db.Model(&repository.Users{}).
+		Find(&users).Error; err != nil {
+		log.Fatalln(err)
+		return err
+	}
+
+	for _, user := range users {
+		log.Printf("ID: %d, email: %s, firstName: %s, lastName: %s, status: %v \n",
+			user.ID,
+			user.Email,
+			user.FirstName,
+			user.LastName,
+			user.Status,
+		)
+	}
+	return nil
+}
