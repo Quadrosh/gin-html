@@ -12,15 +12,15 @@ import (
 	resources "github.com/quadrosh/gin-html/resources/ru"
 )
 
-// AdminHomePage - admin home page
-// @Summary admin home page
-// @Description admin home page
-// @ID AdminHomePage
-// @Tags admin home page
+// UserHomePage - user home page
+// @Summary user home page
+// @Description user home page
+// @ID UserHomePage
+// @Tags user home page
 // @Produce  html
 // @Success 200  "Success"
-// @Router /admin/ [GET]
-func (ctl *Controller) AdminHomePage(ctx *gin.Context) {
+// @Router /user/ [GET]
+func (ctl *Controller) UserHomePage(ctx *gin.Context) {
 
 	var identity = ctx.Keys[constants.ContextKeyIdentity].(*auth.Identity)
 	var user = repository.User{}
@@ -29,8 +29,8 @@ func (ctl *Controller) AdminHomePage(ctx *gin.Context) {
 		ctl.ErrorPage(ctx, http.StatusBadRequest, errors.New(resources.UserNotFound()))
 	}
 
-	render.AdminTemplate(ctl.App, ctl.Engine, ctx, "home.page.tmpl", ResponseMap{
-		"title": "AdminHomePage()" + user.FirstName + " " + user.LastName,
+	render.UserTemplate(ctl.App, ctl.Engine, ctx, "home.page.tmpl", ResponseMap{
+		"title": "UserHomePage " + user.FirstName + " " + user.LastName,
 	})
 
 }

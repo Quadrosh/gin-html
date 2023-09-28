@@ -14,7 +14,7 @@ import (
 
 // iCSRF interface handling csrf
 type iCSRF interface {
-	CSRF(ctx *gin.Context)
+	CSRF(ctx *gin.Context) // adds token to response
 }
 
 // CreateTemplateCache creates template cache
@@ -34,34 +34,28 @@ func CreateTemplateCache(path string, funcs template.FuncMap) (map[string]*templ
 		if err != nil {
 			return tMap, err
 		}
-
 		layoutMatches, err := filepath.Glob(fmt.Sprintf("%s/layout/*.tmpl", path))
 		if err != nil {
 			return tMap, err
 		}
-
 		if len(layoutMatches) > 0 {
 			tmpl, err = tmpl.ParseGlob(fmt.Sprintf("%s/layout/*.tmpl", path))
 			if err != nil {
 				return tMap, err
 			}
 		}
-
 		blockMatches, err := filepath.Glob(fmt.Sprintf("%s/block/*.tmpl", path))
 		if err != nil {
 			return tMap, err
 		}
-
 		if len(blockMatches) > 0 {
 			tmpl, err = tmpl.ParseGlob(fmt.Sprintf("%s/block/*.tmpl", path))
 			if err != nil {
 				return tMap, err
 			}
 		}
-
 		tMap[name] = tmpl
 	}
-
 	return tMap, nil
 }
 
@@ -90,13 +84,9 @@ func MainTemplate(
 	if !ok {
 		return errors.New("can't get template from cache")
 	}
-
 	engine.SetHTMLTemplate(t)
-
 	obj.CSRF(ctx)
-
 	ctx.HTML(http.StatusOK, tmplName, obj)
-
 	return nil
 }
 
@@ -120,17 +110,42 @@ func AdminTemplate(
 			app.MainTemplateCache = tCache
 		}
 	}
-
 	t, ok := tCache[tmplName]
 	if !ok {
 		return errors.New("can't get template from cache")
 	}
-
 	engine.SetHTMLTemplate(t)
-
 	obj.CSRF(ctx)
-
 	ctx.HTML(http.StatusOK, tmplName, obj)
+	return nil
+}
 
+// UserTemplate render user template
+func UserTemplate(
+	app *config.AppConfig,
+	engine *gin.Engine,
+	ctx *gin.Context,
+	tmplName string,
+	obj iCSRF) error {
+	var pathToMainTemplates = filepath.Join(app.CWD, "templates/user")
+
+	var functions = template.FuncMap{}
+
+	var tCache map[string]*template.Template
+	if app.UseCache && app.MainTemplateCache != nil {
+		tCache = app.MainTemplateCache
+	} else {
+		tCache, _ = CreateTemplateCache(pathToMainTemplates, functions)
+		if app.MainTemplateCache == nil {
+			app.MainTemplateCache = tCache
+		}
+	}
+	t, ok := tCache[tmplName]
+	if !ok {
+		return errors.New("can't get template from cache")
+	}
+	engine.SetHTMLTemplate(t)
+	obj.CSRF(ctx)
+	ctx.HTML(http.StatusOK, tmplName, obj)
 	return nil
 }

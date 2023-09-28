@@ -14,3 +14,18 @@ func UserNotFound() string {
 func DatabaseSaveError() string {
 	return "Ошибка сохранения данных в базу данных"
 }
+
+// InvalidEmailOrPassword - Неверный email или пароль
+func InvalidEmailOrPassword() string {
+	return "Неверный email или пароль"
+}
+
+// Forbidden - Недостаточно полномочий для выполнения операции
+func Forbidden() string {
+	return "Недостаточно полномочий для выполнения операции"
+}
+
+// SystemError - Системная ошибка - обратитесь к администратору
+func SystemError() string {
+	return "Системная ошибка - обратитесь к администратору"
+}

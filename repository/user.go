@@ -143,28 +143,28 @@ func (u *User) HashPassword(psw string) error {
 	return nil
 }
 
-func (u *User) verifyPassword(psw string) error {
-	return bcrypt.CompareHashAndPassword([]byte(u.PasswordHash), []byte(psw))
+func (u *User) verifyPassword(pswd string) error {
+	return bcrypt.CompareHashAndPassword([]byte(u.PasswordHash), []byte(pswd))
 }
 
-/*SignIn user. If success, u* instance will be wrapped*/
-func (u *User) SignIn(db *gorm.DB, email, psw string) error {
+// SignIn user. If success, u* instance will be wrapped
+func (u *User) SignIn(db *gorm.DB, email, pswd string) error {
 	email = utils.Normalize(email)
-	tmp := User{}
-	err := db.Model(tmp).
+	var checkUser = User{}
+	err := db.Model(checkUser).
 		Where(&User{Email: email}).
-		Take(&tmp).Error
+		Take(&checkUser).Error
 	if err != nil {
 		return err
 	}
 
-	err = tmp.verifyPassword(psw)
-	if err != nil {
+	if err := checkUser.verifyPassword(pswd); err != nil {
 		return err
 	}
 
-	err = db.Model(tmp).Where("id = ?", tmp.ID).Take(u).Error
-	if err != nil {
+	if err := db.Model(User{}).
+		Where("id = ?", checkUser.ID).
+		Take(u).Error; err != nil {
 		return err
 	}
 

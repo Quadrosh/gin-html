@@ -1,0 +1,48 @@
+.navbarLogo{
+    width: 80px;
+}
+.navbar-brand .labelType{
+    position: absolute;
+    display: block;
+    left: 17px;
+    bottom: 13px;
+    font-size: 1rem;
+}
+.pointer{
+    cursor: pointer;
+}
+h1 {
+    font-size: 1.7em;
+}
+h2 {
+    font-size: 1.6em;
+}
+h3 {
+    font-size: 1.5em;
+}
+h4 {
+    font-size: 1.4em;
+}
+
+.table td, .table th {
+    padding: .4rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+.breadCrumbs,
+.breadCrumbs a{
+     color: rgba(0,0,0,.5);
+     font-size: .8rem;
+     margin-top: 0.5rem;
+     margin-bottom: 0.5rem;
+} 
+
+.modal-header{
+    border-bottom: 1px solid transparent;
+}
+.modal-footer{
+    border-top: 1px solid transparent;
+}
+.nl2br{
+    white-space: pre-line;
+}

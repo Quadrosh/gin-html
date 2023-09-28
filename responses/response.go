@@ -16,3 +16,9 @@ func JsonOK(ctx *gin.Context, obj interface{}) {
 	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, obj)
 }
+
+// ErrorResponse response of error
+type ErrorResponse struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+}

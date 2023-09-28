@@ -7,6 +7,19 @@
 body{
     background-color: white;
 }
+
+/* bootstrap tweaking */
+.form-floating > .form-control,
+.form-floating > .form-select,
+.form-floating > label {
+    padding: .75rem .75rem ;
+}
+.form-floating > .form-control, 
+.form-floating > .form-select {
+    height: calc(3.0rem + 2px);
+    line-height: 1.25;
+}
+
 h1{
     color: rgba(black,0.5);
 }
@@ -49,21 +62,14 @@ h1{
 
 
 .dropdown-menu {
-    background-color: transparent;
+    /* background-color: transparent; */
     border:none;
-  }
+}
 
-  .dropdown-menu .dropdown-item {
+.dropdown-menu .dropdown-item {
     display: block;
-    width: 100%;
     padding: .25rem 1.5rem;
-    font-weight: 400;
-    color: white;
-    background-color: transparent;
-    border: 0;
-    position: relative;
-    left: -1.5rem;
-  }
-  .nl2br{
+}
+.nl2br{
     white-space: pre-line;
 }

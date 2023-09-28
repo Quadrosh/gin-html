@@ -1,0 +1,148 @@
+{{template "base" .}}
+
+
+{{define "content"}}
+
+
+
+<div class="container">
+   
+
+    <h1 class="mt-3 text-center">Вход</h1>
+
+    {{$error :=  .error }}
+    {{if $error}}
+    <p class="text-center text-danger">
+        Ошибка: {{$error}}
+    </p>
+    {{end}}<!-- $error  -->
+
+
+
+
+    <br>
+    <br>
+
+    <form  name="signinForm" class="pb-5 requires-validation" novalidate
+            id="signinForm">
+        <input type="hidden" name="_csrf" value="{{.CSRFToken}}">
+
+        <div class="row">
+            <div class="col-sm-8 offset-sm-2">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-floating">
+                            <input id="email" required class="form-control"
+                                    type="email"
+                                    name="email" 
+                                    placeholder="name@example.com"/>
+                            <label for="email">Email</label>
+                            <div class="invalid-feedback" id="emailErrBlock">Некорректный email</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-floating">
+                            <input  id="password" required class="form-control" 
+                                    type="password" 
+                                    name="password" 
+                                    pattern=".{8,}"
+                                    placeholder="пароль"/>
+                            <label  for="password">Пароль</label>
+                            <div class="invalid-feedback" id="passwordErrBlock">Обязательное поле</div>
+                        </div>
+                    </div>
+                    <div class="col-12 text-center mt-5">
+                        <button type="submit" class="btn btn-primary">Войти</button>
+                    
+                    </div>
+                    
+                </div>
+   
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+{{end}}<!-- content  -->
+
+
+
+<script>
+
+
+
+    let signinForm = document.getElementById('signinForm');
+    signinForm.addEventListener('submit', function(e) {
+        e.preventDefault(); 
+        
+        if (!signinForm.checkValidity()) {
+            event.stopPropagation()
+            console.log('>>>> форма невалидна', signinForm)
+
+            
+
+            const emailErrBlock = document.getElementById("emailErrBlock");
+            emailErrBlock.innerHTML = ""
+            const emailErrList = []
+            if (this.email.value.trim() == "") emailErrList.push("Еmail не заполнен");
+            const validateEmail = (email) => {
+                return String(email)
+                    .toLowerCase()
+                    .match(
+                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                    );
+            }
+            if (!validateEmail(this.email.value)) emailErrList.push("Некорректный Еmail адрес");
+            if (emailErrList.length) {
+                emailErrBlock.innerHTML = emailErrList.join("<br/>");
+            }
+
+            const passErrBlock = document.getElementById("passwordErrBlock");
+            passErrBlock.innerHTML = ""
+            const passErrList = []
+            if (this.password.value.trim() == "") passErrList.push("Пароль - обязательное поле");
+            if (this.password.value.trim().length > 0 && 
+                this.password.value.trim().length < 8) {
+                    passErrList.push("Минимум 8 символов")
+            }
+            if (passErrList.length) {
+                passErrBlock.innerHTML = passErrList.join("<br/>");
+            }
+            return 
+        }
+        let formData = new FormData()
+        formData.append("_csrf", "{{.CSRFToken}}")
+        formData.append("password", e.target['password'].value)
+        formData.append("email", e.target['email'].value)
+
+        fetch("/signin",{
+            method: "post",
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                if(data.error) {
+                    snackBarError(data.error)
+                }
+                if(data.access_token){
+                    setAccessToken(data.access_token)
+                }
+                if(data.success) {
+                    snackBarInfo('Вы успешно авторизованы')
+                }
+
+                if(data.redirect){
+                    window.location.href = data.redirect
+                }
+   
+
+            });
+         
+          });
+   
+       
+</script>
+<!--  notifyModal('!',data.message,"","ОК") -->
