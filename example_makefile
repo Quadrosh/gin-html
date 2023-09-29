@@ -24,11 +24,11 @@ run:
 tidy:
 	go mod tidy
 
-# make cli-create-user  firstname="Евгений" lastname="Мироненко" email="kovex@artist.com"
+# make cli-create-user  firstname="John" lastname="Doe" email="some@example.com"
 cli-create-user :
 	go run cmd/cli/main.go	create_user -firstname $(firstname) -lastname $(lastname)  -email $(email) 
 
-# make cli-create-admin  firstname="admin3" lastname="Third" email="admin3@admin.com"
+# make cli-create-admin  firstname="John" lastname="Doe" email="some@example.com"
 cli-create-admin :
 	go run cmd/cli/main.go	create_admin -firstname $(firstname) -lastname $(lastname)  -email $(email) 	
 
