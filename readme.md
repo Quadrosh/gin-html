@@ -1,4 +1,6 @@
-Gin simple start template for html project
+### Gin simple start template for html project
 
 
-runs by makefile or vscode debugger
+Runs by makefile or VSCode debugger  
+
+Rename example_config.env to config.env and example_makefile to makefile (works on unix)
