@@ -21,9 +21,6 @@ import (
 // InitRoutes инициализация доступных URL
 func InitRoutes(ctl *controllers.Controller) *gin.Engine {
 
-	ginMode := "release"
-	gin.SetMode(ginMode)
-
 	var router = gin.Default() // with logger
 	// router := gin.New()
 	// router.Use(gin.Recovery())
@@ -35,7 +32,7 @@ func InitRoutes(ctl *controllers.Controller) *gin.Engine {
 		ReferrerPolicy: "strict-origin-when-cross-origin",
 	}))
 
-	store := cookie.NewStore([]byte("secret"))
+	var store = cookie.NewStore([]byte("secret"))
 	router.Use(sessions.Sessions("mysession", store))
 	router.Use(csrf.Middleware(csrf.Options{
 		Secret: ctl.App.ApiSecret,

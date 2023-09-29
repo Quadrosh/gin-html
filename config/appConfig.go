@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strconv"
 
 	"github.com/joho/godotenv"
@@ -40,34 +41,32 @@ type AppConfig struct {
 
 func (app *AppConfig) LoadConfig() {
 
-	const fileNameConfigEnv = "config.env"
+	const envFileName = "config.env"
 
-	// try to init config from executing file
 	var err error
 	exe, _ := os.Executable()
-	var env = filepath.Join(filepath.Dir(exe), fileNameConfigEnv)
-	if _, err = os.Stat(env); err == nil { // file not found
-		err = godotenv.Load(env)
-		if err != nil {
-			log.Printf("Error getting Env file: %s, reason: %+v", env, err)
-		} else {
-			log.Printf("Env file: %s loaded successfully", env)
-		}
-	}
+	var env = filepath.Join(filepath.Dir(exe), envFileName)
+	err = loadEnv(env)
 
 	cwd, _ := os.Getwd()
 	app.CWD = cwd
-	var cwdenv = filepath.Join(cwd, fileNameConfigEnv)
+	var cwdenv = filepath.Join(cwd, envFileName)
 	if err != nil &&
 		len(cwdenv) != 0 {
-		// from CWD
-		if _, err = os.Stat(cwdenv); err == nil {
-			err = godotenv.Load(cwdenv)
-			if err != nil {
-				log.Printf("Error getting Env file: %s, reason: %+v", cwdenv, err)
-			} else {
-				log.Printf("Env file: %s loaded successfully", cwdenv)
-			}
+		err = loadEnv(cwdenv)
+	}
+
+	if err != nil {
+		_, b, _, _ := runtime.Caller(0)
+		projectRoot := filepath.Join(filepath.Dir(b), "..")
+		var prEnv = filepath.Join(projectRoot, envFileName)
+		err = loadEnv(prEnv)
+		if err == nil { // config found
+			app.CWD = projectRoot
+		} else { // config not found
+			projectRoot = filepath.Join(filepath.Dir(b), "../..")
+			prEnv = filepath.Join(projectRoot, envFileName)
+			err = loadEnv(prEnv)
 		}
 	}
 
@@ -157,4 +156,19 @@ func (app *AppConfig) LoadConfig() {
 
 	app.LocalConfig = lConfig
 
+}
+
+func loadEnv(envFilePath string) error {
+	_, err := os.Stat(envFilePath)
+	if err != nil {
+		return err
+	}
+	// config found
+	err = godotenv.Load(envFilePath)
+	if err != nil {
+		log.Printf("Error getting Env file: %s, reason: %+v", envFilePath, err)
+		return err
+	}
+	log.Printf("Env file: %s loaded successfully", envFilePath)
+	return nil
 }
