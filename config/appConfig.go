@@ -77,7 +77,7 @@ func (app *AppConfig) LoadConfig() {
 	}
 
 	if err != nil {
-		log.Fatalf("Error getting env, %v", err)
+		log.Panicf("Error getting env, %v", err)
 	}
 
 	inProduction := os.Getenv("PRODUCTION") // flag.Bool("production", true, "Application is in production")

@@ -156,7 +156,7 @@ func (ctl *Controller) SigninPage(ctx *gin.Context) {
 	if err := render.MainTemplate(ctl.App, ctl.Engine, ctx, "signin.page.tmpl", ResponseMap{
 		"title": "Sign in page()", // TODO from pages
 	}); err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 }
 

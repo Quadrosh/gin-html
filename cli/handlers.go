@@ -37,14 +37,14 @@ func (cli *CommandLine) createAdmin(db *gorm.DB, firstName, lastName, email stri
 
 	if err := db.Create(&user).Error; err != nil {
 		log.Printf("error during creating user %v\n", err)
-		log.Fatalln(err)
+		log.Panic(err)
 		return err
 	}
 
 	var users repository.Users
 	if err := db.Model(&repository.Users{}).
 		Find(&users).Error; err != nil {
-		log.Fatalln(err)
+		log.Panic(err)
 		return err
 	}
 
@@ -88,14 +88,14 @@ func (cli *CommandLine) createUser(db *gorm.DB, firstName, lastName, email strin
 
 	if err := db.Create(&user).Error; err != nil {
 		log.Printf("error during creating user %v\n", err)
-		log.Fatalln(err)
+		log.Panic(err)
 		return err
 	}
 
 	var users repository.Users
 	if err := db.Model(&repository.Users{}).
 		Find(&users).Error; err != nil {
-		log.Fatalln(err)
+		log.Panic(err)
 		return err
 	}
 
@@ -144,7 +144,7 @@ func (cli *CommandLine) PasswordResetLink(db *gorm.DB, email string) error {
 	})
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Panic(err)
 	}
 
 	return nil
@@ -156,7 +156,7 @@ func (cli *CommandLine) PrintUsers(db *gorm.DB) error {
 	var users repository.Users
 	if err := db.Model(&repository.Users{}).
 		Find(&users).Error; err != nil {
-		log.Fatalln(err)
+		log.Panic(err)
 		return err
 	}
 

@@ -1,0 +1,141 @@
+{{template "admin" .}}
+
+
+{{define "content"}}
+
+{{$constPageType :=  .PageTypeConstMap }}
+{{$constPageStatus :=  .PageStatusConstMap }}
+
+<div class="container-fluid my-2">
+   
+    <div class="col-12">
+        <h1>Страницы</h1>
+
+        <div class="mb-3">
+            <a class="btn btn-primary" href="/admin/page/create">Создать</a>
+        </div>
+
+        {{$models := .Entries }}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th>URL</th>
+                    <th>ArtistID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>CreatedAt</th>
+                    <th>UpdatedAt</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range $models}}
+                <tr>
+                    <td><a href="/admin/page/{{.ID}}">{{.ID}}</a></td>
+                    <td>
+                        {{if not .Type}} не определено
+                        {{else if eq .Type 0}} не назначено
+                        {{else if eq .Type (index $constPageType "PageTypeCommon")}} Common
+                        {{else if eq .Type (index $constPageType "PageTypeArticle")}} Article
+                        {{else}} Значение вне списка
+                        {{end}} 
+                        <sup>({{ .Type}})</sup>
+                    </td>
+                    <td>{{.Hrurl}}</td>
+                    <td>
+                        ArticleID
+                    </td>
+                    <td>{{.Title}}</td>
+                    <td>{{.Description}}</td>
+                    <td>
+                        {{if not .Status}} не определено
+                        {{else if eq .Status 0}} не назначено
+                        {{else if eq .Status (index $constPageStatus "PageStatusDraft")}} В разработке
+                        {{else if eq .Status (index $constPageStatus "PageStatusPublished")}} Published
+                        {{else}}  Значение вне списка
+                        {{end}} 
+                        <sup>({{.Status}})</sup>
+                    </td>
+                    
+                    <td>{{.CreatedAt.Format "15:04 02/01/2006"}}</td>
+                    <td>{{.UpdatedAt.Format "15:04 02/01/2006"}}</td>
+    
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+
+        {{$pagination := .Pagination }}
+        <div class="mb-5 mt-2 text-right">  
+                <span>Объектов на страницу</span> 
+                <select class="itemsToPageSelect" 
+                        id="pageSizeSelect"
+                        data-page="{{$pagination.CurrentPage}}"
+                        data-last="{{$pagination.ItemLast}}"
+                        data-total="{{$pagination.Total}}"
+                        onchange="onPageSelectChange()">
+                    <option {{if eq $pagination.PageSize 10 }} selected {{end}} value="10">10</option>
+                    <option {{if eq $pagination.PageSize 20 }} selected {{end}} value="20">20</option>
+                    <option {{if eq $pagination.PageSize 40 }} selected {{end}} value="40">40</option>
+                </select>
+                <span>
+                  {{$pagination.ItemFirst}} - {{$pagination.ItemLast}}
+                </span> из <span>{{$pagination.Total}}</span>
+                
+                <button 
+                    class="btn btn-secondary {{if gt $pagination.CurrentPage 1}}active{{end}}"
+                    id="controlGoToPrevPage"
+                    onclick="goToPrevPage()"
+                    ><</button>
+                <button 
+                    class="btn btn-secondary {{if lt $pagination.ItemLast $pagination.Total}}active{{end}}"
+                    id="controlGoToNextPage"
+                    onclick="goToNextPage()"
+                    >></button>
+        </div>
+
+    </div>
+</div>
+
+
+
+<script>
+    function onPageSelectChange(){
+        let select = document.getElementById("pageSizeSelect");
+        window.location.href = '/admin/pages?page='+(select.dataset.page)+'&size='+select.value;
+    }
+
+    function goToPrevPage(){
+        let select = document.getElementById("pageSizeSelect");
+        if(+select.dataset.page >1){
+            window.location.href = '/admin/pages?page='+(+select.dataset.page-1)+'&size='+select.value;
+        }  
+    }
+
+    function goToNextPage(){
+        let select = document.getElementById("pageSizeSelect");
+        if(+select.dataset.last < +select.dataset.total){
+            window.location.href = '/admin/pages?page='+(+select.dataset.page+1)+'&size='+select.value;
+        }
+  
+    }
+
+
+    document.addEventListener("DOMContentLoaded", function(){
+        var select = document.getElementById("pageSizeSelect");
+        if (select){
+            var prevBtn = document.getElementById("controlGoToPrevPage");
+            var nextBtn = document.getElementById("controlGoToNextPage");
+            prevBtn.setAttribute('href', '/admin/pages?page='+(+select.dataset.page-1)+'&size='+select.value)
+            nextBtn.setAttribute('href', '/admin/pages?page='+(+select.dataset.page+1)+'&size='+select.value)
+        }
+    });
+  
+</script>
+
+
+{{end}}
+
+

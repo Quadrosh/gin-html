@@ -60,7 +60,7 @@ func RunServer(
 
 	go func() {
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("listen error: %s\n", err)
+			log.Panicf("listen error: %s\n", err)
 		}
 	}()
 
@@ -76,7 +76,7 @@ func RunServer(
 		cancel()
 	}()
 	if err := server.Shutdown(_ctx); err != nil {
-		log.Fatalf("server shutdown failed: %+v", err)
+		log.Panicf("server shutdown failed: %+v", err)
 	}
 
 	log.Println("shutted down gracefully")

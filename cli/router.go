@@ -72,7 +72,7 @@ func (cli *CommandLine) Run(db *gorm.DB) {
 	case usersCmd: // no arguments - no flags
 		err := cli.PrintUsers(db)
 		if err != nil {
-			log.Fatal(err)
+			log.Panic(err)
 		}
 	default:
 		cli.printUsage()
@@ -95,7 +95,7 @@ func (cli *CommandLine) Run(db *gorm.DB) {
 
 		err := cli.createAdmin(db, *createAdminFirstName, *createAdminLastName, *createAdminEmail)
 		if err != nil {
-			log.Fatal(err)
+			log.Panic(err)
 		}
 	}
 
@@ -115,7 +115,7 @@ func (cli *CommandLine) Run(db *gorm.DB) {
 
 		err := cli.createUser(db, *createUserFirstName, *createUserLastName, *createUserEmail)
 		if err != nil {
-			log.Fatal(err)
+			log.Panic(err)
 		}
 	}
 
@@ -127,7 +127,7 @@ func (cli *CommandLine) Run(db *gorm.DB) {
 
 		err := cli.PasswordResetLink(db, *pwResetLinkrEmail)
 		if err != nil {
-			log.Fatal(err)
+			log.Panic(err)
 		}
 	}
 

@@ -2,9 +2,12 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/quadrosh/gin-html/config"
+	"github.com/quadrosh/gin-html/internal/constants"
+	"github.com/quadrosh/gin-html/repository"
 	csrf "github.com/utrack/gin-csrf"
 	"gorm.io/gorm"
 )
@@ -35,6 +38,27 @@ type ResponseMap gin.H
 func (m ResponseMap) CSRF(ctx *gin.Context) {
 	m["CSRFToken"] = csrf.GetToken(ctx)
 	m["CurrentURL"] = ctx.Request.URL.Path
+}
+
+// GetPagination - получение пагинации из GET
+func (ctl *Controller) GetPagination(r *http.Request) repository.Pagination {
+	var (
+		result     repository.Pagination
+		curPageStr = r.URL.Query().Get("page")
+		count      = r.URL.Query().Get("size")
+	)
+	if c, err := strconv.Atoi(count); err == nil {
+		result.PageSize = c
+	} else {
+		result.PageSize = constants.DefaultEntriesCount
+	}
+	if p, err := strconv.Atoi(curPageStr); err == nil {
+		result.CurrentPage = p
+	} else {
+		result.CurrentPage = 1
+	}
+
+	return result
 }
 
 // Ping - ping-pong test

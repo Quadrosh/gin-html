@@ -23,6 +23,5 @@ type ActionModel struct {
 // AllModels - automigration models
 var AllModels = []interface{}{
 	&User{},
-	// &Page{},
-
+	&Page{},
 }

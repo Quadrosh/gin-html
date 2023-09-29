@@ -1,0 +1,47 @@
+# help
+help:
+	$(info  )
+	$(info ******************************************************************* )
+	$(info ****                       maintenance                        ***** )
+	$(info ****                                                          ***** )
+	$(info ************************** Commands ******************************* )
+	$(info *   run                 - run dev server )
+	$(info *   tidy                - go mod tidy )
+	$(info *   cli-create-user     - usage: cli-create-user  firstname="John" lastname="Doe" email="some@example.com" )
+	$(info *   cli-create-admin    - usage: cli-create-user  firstname="John" lastname="Doe" email="some@example.com"  )
+	$(info *   cli-users           - print users to consol )
+	$(info *   cli-password-reset  - get password reset link, usage: cli-password-reset  email="admin3@admin.com" )
+	$(info ******************************************************************* )
+
+
+# ==============================================================================
+# default run
+run:
+	go run cmd/web/main.go 
+
+# ==============================================================================
+# command on modules list update
+tidy:
+	go mod tidy
+
+# make cli-create-user  firstname="Евгений" lastname="Мироненко" email="kovex@artist.com"
+cli-create-user :
+	go run cmd/cli/main.go	create_user -firstname $(firstname) -lastname $(lastname)  -email $(email) 
+
+# make cli-create-admin  firstname="admin3" lastname="Third" email="admin3@admin.com"
+cli-create-admin :
+	go run cmd/cli/main.go	create_admin -firstname $(firstname) -lastname $(lastname)  -email $(email) 	
+
+# make cli-users  
+cli-users :
+	go run cmd/cli/main.go	users  
+
+# make cli-password-reset  email="admin3@admin.com"
+cli-password-reset :
+	go run cmd/cli/main.go	password_reset_link  -email $(email) 	
+
+
+# ==============================================================================
+# testing
+test:
+	go test -v ./...
