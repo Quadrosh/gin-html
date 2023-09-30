@@ -15,18 +15,56 @@ for (var i = 0, l = els.length; i < l; i++) {
 
 
 
-var snackBarInfo = function (text) {
-    var message = SnackBar({
-        message: text,
-        timeout: 10000,
-        fixed: true,
+
+
+// bootstrap snackBar 
+var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+var toastList = toastElList.map(function (toastEl) {
+return new bootstrap.Toast(toastEl, {
+    'animation':true,
+    'autohide':true,
+    // 'delay': 5000, // delay sets by data attr
     })
+})
+
+// show bootstrap toast error 
+function toastError(message){
+    let toastEl = document.getElementById('errToastEl')
+    if(toastEl){
+        toastEl.classList.remove('bg-success', 'bg-primary', 'bg-danger');
+        toastEl.classList.add('bg-danger');  
+        toastEl.querySelector('.toast-body').innerHTML = message; 
+        let toast = bootstrap.Toast.getInstance(toastEl)
+        toast.show()
+        return
+    }
+    console.error('Cant show error, element '+ elementID+' not found')
 }
-var snackBarError = function (text) {
-    var message = SnackBar({
-        status: "error",
-        message: text,
-        timeout: 30000,
-        fixed: true,
-    })
+
+// show bootstrap toast info 
+function toastInfo(message){
+    let toastEl = document.getElementById('errToastEl')
+    if(toastEl){
+        toastEl.classList.remove('bg-success', 'bg-primary', 'bg-danger');
+        toastEl.classList.add('bg-primary');  
+        toastEl.querySelector('.toast-body').innerHTML = message; 
+        let toast = bootstrap.Toast.getInstance(toastEl)
+        toast.show()
+        return
+    }
+    console.error('Cant show error, element '+ elementID+' not found')
+}
+
+// show bootstrap toast success 
+function toastSuccess(message){
+    let toastEl = document.getElementById('errToastEl')
+    if(toastEl){
+        toastEl.classList.remove('bg-success', 'bg-primary', 'bg-danger');
+        toastEl.classList.add('bg-success');  
+        toastEl.querySelector('.toast-body').innerHTML = message; 
+        let toast = bootstrap.Toast.getInstance(toastEl)
+        toast.show()
+        return
+    }
+    console.error('Cant show error, element '+ elementID+' not found')
 }

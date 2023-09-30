@@ -1,0 +1,213 @@
+
+
+
+{{define "admin_page_form"}}
+
+{{$page := .Page }}
+{{$pageTypeConstMap := .PageTypeConstMap}}
+{{$pageStatusConstMap := .PageStatusConstMap}}
+
+
+<form action="{{.Form.URL}}" 
+        method="POST" 
+        novalidate>
+    <input type="hidden" name="_csrf" value="{{.CSRFToken}}">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="typeInput">Type</label>
+
+                <select name="type" 
+                        id="typeInput" 
+                        type="text" 
+                        class="form-control" 
+                        aria-describedby="Тип">
+
+                        {{range $key, $value := $pageTypeConstMap}}
+                        <option value="{{$value}}"
+                                {{if eq $value $page.Type}}selected="selected"{{end}}
+                                >{{$key}}</option>
+                        {{end}}
+                    
+                </select>
+                {{range (index .Form.Errors "type")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="articleIdInput">ArticleID</label>
+                <input name="article_id" 
+                        id="articleIdInput"
+                        type="text" 
+                        required
+                        class="form-control  {{if ne (len (index .Form.Errors "article_id")) 0 }} is-invalid  {{end}}" 
+                        value="{{$page.ArticleID}}"
+                        aria-describedby="ArticleID"
+                        >
+                            
+                {{range (index .Form.Errors "article_id")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="hrurlInput"> Hrurl</label>
+                <input name="hrurl" 
+                        id="hrurlInput"
+                        type="text" 
+                        required
+                        class="form-control  {{if ne (len (index .Form.Errors "hrurl")) 0 }} is-invalid  {{end}}" 
+                        value="{{$page.Hrurl}}"
+                        aria-describedby="Hrurl"
+                        >
+    
+                
+                {{range (index .Form.Errors "hrurl")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+                        
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="titleInput">Title</label>
+                <input name="title" 
+                        id="titleInput" 
+                        type="text" 
+                        class="form-control  {{if ne (len (index .Form.Errors "title")) 0 }} is-invalid  {{end}}" 
+                        value="{{$page.Title}}"
+                        aria-describedby="Title"
+                        >
+                {{range (index .Form.Errors "title")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="descriptionInput">Description</label>
+                <input name="description" 
+                        id="descriptionInput" 
+                        type="text" 
+                        class="form-control  {{if ne (len (index .Form.Errors "description")) 0 }} is-invalid  {{end}}" 
+                        value="{{$page.Description}}"
+                        aria-describedby="Description"
+                            >
+                {{range (index .Form.Errors "description")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+    
+        
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="keywordsInput">Keywords</label>
+                <input name="keywords" 
+                        id="keywordsInput"
+                        type="text" 
+                        required
+                        class="form-control  {{if ne (len (index .Form.Errors "keywords")) 0 }} is-invalid  {{end}}" 
+                        value="{{$page.Keywords}}"
+                        aria-describedby="Keywords"
+                        >
+                            
+                {{range (index .Form.Errors "keywords")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="h1Input">H1</label>
+                <input name="h1" 
+                        id="h1Input"
+                        type="text" 
+                        required
+                        class="form-control  {{if ne (len (index .Form.Errors "h1")) 0 }} is-invalid  {{end}}" 
+                        value="{{$page.H1}}"
+                        aria-describedby="H1"
+                        >
+                            
+                <!-- {{range (index .Form.Errors "h1")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}} -->
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="PageDescriptionInput">PageDescription</label>
+               
+                <textarea name="page_description" 
+                        id="PageDescriptionInput"
+                        rows="1"
+                        class="form-control  {{if ne (len (index .Form.Errors "page_description")) 0 }} is-invalid  {{end}}" 
+                        aria-describedby="PageDescription"
+                        >{{$page.PageDescription}}</textarea>        
+                            
+                {{range (index .Form.Errors "page_description")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9">
+            <div class="form-group">
+                <label for="textInput">Text</label>
+                <textarea name="text" 
+                        id="textInput"
+                        rows="3"
+                        class="form-control  {{if ne (len (index .Form.Errors "text")) 0 }} is-invalid  {{end}}" 
+                        aria-describedby="Text"
+                        >{{$page.Text}}</textarea>
+                            
+                {{range (index .Form.Errors "text")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="statusInput">Status</label>
+                <select name="status" 
+                        id="statusInput" 
+                        class="form-control  {{if ne (len (index .Form.Errors "status")) 0 }} is-invalid  {{end}}" 
+                        aria-describedby="Статус">
+
+                        {{range $key, $value := $pageStatusConstMap}}
+                        <option value="{{$value}}" 
+                                {{if eq $value $page.Status}}selected="selected"{{end}}
+                                >{{$key}}</option>
+                        {{end}}
+                        <option value="0"
+                                {{if eq 0 $page.Status}}selected="selected"{{end}}
+                                >не определено</option>
+                </select>
+                
+                {{range (index .Form.Errors "status")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+        
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+
+
+
+
+{{end}}
+

@@ -45,3 +45,8 @@ cli-password-reset :
 # testing
 test:
 	go test -v ./...
+
+# ==============================================================================
+# build swagger      
+build-swagger:
+	swag init --parseDependency --parseInternal --parseDepth 1  -g cmd/web/main.go

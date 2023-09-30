@@ -5,8 +5,10 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/quadrosh/gin-html/internal/auth"
+	"github.com/quadrosh/gin-html/internal/constants"
 	"github.com/quadrosh/gin-html/render"
 	"github.com/quadrosh/gin-html/repository"
 	resources "github.com/quadrosh/gin-html/resources/ru"
@@ -153,8 +155,17 @@ func (ctl *Controller) PasswordResetPOST(ctx *gin.Context) {
 // @Success 200
 // @Router /signin [GET]
 func (ctl *Controller) SigninPage(ctx *gin.Context) {
+
+	var session = sessions.Default(ctx)
+	err, _ := session.Get(constants.SessionKeyError).(string)
+	if err != "" {
+		session.Set(constants.SessionKeyError, nil)
+		session.Save()
+	}
+
 	if err := render.MainTemplate(ctl.App, ctl.Engine, ctx, "signin.page.tmpl", ResponseMap{
 		"title": "Sign in page()", // TODO from pages
+		"error": err,
 	}); err != nil {
 		log.Panic(err)
 	}

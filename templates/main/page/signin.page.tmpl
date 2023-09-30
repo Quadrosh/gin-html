@@ -5,17 +5,12 @@
 
 
 
-<div class="container">
+<div class="container ">
    
 
     <h1 class="mt-3 text-center">Вход</h1>
 
-    {{$error :=  .error }}
-    {{if $error}}
-    <p class="text-center text-danger">
-        Ошибка: {{$error}}
-    </p>
-    {{end}}<!-- $error  -->
+    
 
 
 
@@ -62,6 +57,8 @@
             </div>
         </div>
     </form>
+
+    {{block "toast" .}}{{end}}
 </div>
 
 
@@ -72,6 +69,13 @@
 
 <script>
 
+   
+
+    let _err = "{{.error }}"
+    if(_err ){
+        toastError(_err)
+    }
+
 
 
     let signinForm = document.getElementById('signinForm');
@@ -79,10 +83,7 @@
         e.preventDefault(); 
         
         if (!signinForm.checkValidity()) {
-            event.stopPropagation()
-            console.log('>>>> форма невалидна', signinForm)
-
-            
+            event.stopPropagation()            
 
             const emailErrBlock = document.getElementById("emailErrBlock");
             emailErrBlock.innerHTML = ""
@@ -125,13 +126,13 @@
             .then(response => response.json())
             .then(data => {
                 if(data.error) {
-                    snackBarError(data.error)
+                    toastError(data.error)
                 }
                 if(data.access_token){
                     setAccessToken(data.access_token)
                 }
                 if(data.success) {
-                    snackBarInfo('Вы успешно авторизованы')
+                    toastInfo('Вы успешно авторизованы')
                 }
 
                 if(data.redirect){

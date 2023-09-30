@@ -1,5 +1,8 @@
 ### Gin simple start template for html project
-
+includes:
+- authorization, login/logout
+- admin and user roles
+- mainSite, admin and user site sections
 
 Runs by makefile or VSCode debugger  
 

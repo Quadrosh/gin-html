@@ -1,0 +1,22 @@
+{{template "admin" .}}
+
+
+
+{{define "content"}}
+
+<div class="container-fluid my-2">
+  <div class="col-12">
+
+    <div class="breadCrumbs ">
+        <a href="/admin/pages">Страницы</a> > 
+        Создание
+    </div>
+  {{$isActionCreateNew := true }}
+  {{template "admin_page_form" .}}
+
+  </div>
+</div>
+
+{{end}}
+
+

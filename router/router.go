@@ -77,6 +77,7 @@ func InitRoutes(ctl *controllers.Controller) *gin.Engine {
 	adminRoute.Use(AuthMiddleware(ctl.Db, ctl.App.ApiSecret, repository.UserRoleTypeAdmin, router))
 	adminRoute.GET("", ctl.AdminHomePage)
 	adminRoute.GET("/pages", ctl.AdminPageIndexPage)
+	adminRoute.GET("/page/create", ctl.AdminPageCreatePage)
 
 	userRoute := router.Group("/user")
 	userRoute.Use(AuthMiddleware(ctl.Db, ctl.App.ApiSecret, repository.UserRoleTypeUser, router))
@@ -113,13 +114,11 @@ func AuthMiddleware(db *gorm.DB, apiSecret string, role repository.UserRoleType,
 		if err != nil {
 			c.Error(err)
 			if c.Request.Method == "GET" {
-				var session = sessions.Default(c)
-				session.Set(constants.ContextKeyRedirectError, responses.ErrorResponse{
-					Code:    http.StatusForbidden,
-					Message: resources.Forbidden(),
-				})
-				c.Request.URL.Path = constants.RedirectErrURL
-				r.HandleContext(c)
+				s := sessions.Default(c)
+				s.Set(constants.SessionKeyError, resources.Forbidden())
+				_ = s.Save()
+
+				c.Redirect(303, "/signin")
 				return
 			}
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"status": false, "message": resources.Forbidden()})
