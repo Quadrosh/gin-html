@@ -58,7 +58,6 @@
         </div>
     </form>
 
-    {{block "toast" .}}{{end}}
 </div>
 
 
@@ -69,11 +68,11 @@
 
 <script>
 
-   
+ 
 
-    let _err = "{{.error }}"
+    let _err = "{{.Error }}"
     if(_err ){
-        toastError(_err)
+        (new ToastError(_err)).show()
     }
 
 
@@ -126,7 +125,7 @@
             .then(response => response.json())
             .then(data => {
                 if(data.error) {
-                    toastError(data.error)
+                    (new ToastError(data.error)).show()
                 }
                 if(data.access_token){
                     setAccessToken(data.access_token)

@@ -22,3 +22,11 @@ type ErrorResponse struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 }
+
+// ConfirmResponse response of confirm modal message
+type ConfirmResponse struct {
+	Message      string `json:"message"`
+	YesBtnName   string `json:"yes_btn_name"`
+	YesBtnAction string `json:"yes_btn_action"`
+	NoBtnName    string `json:"no_btn_name"`
+}

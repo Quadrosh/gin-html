@@ -38,6 +38,15 @@ type SigninResponse struct {
 	Redirect    SignInRedirect `json:"redirect"`
 }
 
+// SigninPageResponse response to SigninPage
+type SigninPageResponse struct {
+	responses.OkResponse
+	responses.ConfirmResponse
+
+	PageMeta
+	CSRFResponse
+}
+
 // PasswordResetPage - password reset page
 // @Summary password reset page
 // @Description page of user password reset
@@ -163,9 +172,14 @@ func (ctl *Controller) SigninPage(ctx *gin.Context) {
 		session.Save()
 	}
 
-	if err := render.MainTemplate(ctl.App, ctl.Engine, ctx, "signin.page.tmpl", ResponseMap{
-		"title": "Sign in page()", // TODO from pages
-		"error": err,
+	if err := render.MainTemplate(ctl.App, ctl.Engine, ctx, "signin.page.tmpl", &SigninPageResponse{
+		OkResponse: responses.OkResponse{
+			Success: true,
+			Error:   err,
+		},
+		PageMeta: PageMeta{
+			Title: "Sign in page()", // TODO from pages,
+		},
 	}); err != nil {
 		log.Panic(err)
 	}

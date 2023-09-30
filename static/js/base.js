@@ -17,54 +17,101 @@ for (var i = 0, l = els.length; i < l; i++) {
 
 
 
-// bootstrap snackBar 
-var toastElList = [].slice.call(document.querySelectorAll('.toast'))
-var toastList = toastElList.map(function (toastEl) {
-return new bootstrap.Toast(toastEl, {
-    'animation':true,
-    'autohide':true,
-    // 'delay': 5000, // delay sets by data attr
-    })
-})
 
-// show bootstrap toast error 
-function toastError(message){
-    let toastEl = document.getElementById('errToastEl')
-    if(toastEl){
-        toastEl.classList.remove('bg-success', 'bg-primary', 'bg-danger');
-        toastEl.classList.add('bg-danger');  
-        toastEl.querySelector('.toast-body').innerHTML = message; 
-        let toast = bootstrap.Toast.getInstance(toastEl)
-        toast.show()
-        return
+
+/* Example toast */
+// (new ToastError('text')).show()
+// (new ToastInfo('text')).show()
+
+
+
+/* Toast constuctor */
+function ToastInfo(text) {
+    var toastElement = _buildToast(text, 'bg-primary', 10000); // 'bg-success', 'bg-primary', 'bg-danger'
+    var toastWrapper = _getOrCreateToastWrapper();
+    toastWrapper.append(toastElement);
+    this.bootstrapToast = bootstrap.Toast.getOrCreateInstance(toastElement);
+    this.show = function() {
+        this.bootstrapToast.show();
     }
-    console.error('Cant show error, element '+ elementID+' not found')
+    this.hide = function() {
+        this.bootstrapToast.hide();
+    }
+    this.dispose = function() {
+        this.bootstrapToast.dispose();
+    }
 }
 
-// show bootstrap toast info 
-function toastInfo(message){
-    let toastEl = document.getElementById('errToastEl')
-    if(toastEl){
-        toastEl.classList.remove('bg-success', 'bg-primary', 'bg-danger');
-        toastEl.classList.add('bg-primary');  
-        toastEl.querySelector('.toast-body').innerHTML = message; 
-        let toast = bootstrap.Toast.getInstance(toastEl)
-        toast.show()
-        return
+function ToastError(text) {
+    var toastElement = _buildToast(text, 'bg-danger', 15000); // 'bg-success', 'bg-primary', 'bg-danger'
+    var toastWrapper = _getOrCreateToastWrapper();
+    toastWrapper.append(toastElement);
+    this.bootstrapToast = bootstrap.Toast.getOrCreateInstance(toastElement);
+    this.show = function() {
+        this.bootstrapToast.show();
     }
-    console.error('Cant show error, element '+ elementID+' not found')
+    this.hide = function() {
+        this.bootstrapToast.hide();
+    }
+    this.dispose = function() {
+        this.bootstrapToast.dispose();
+    }
 }
 
-// show bootstrap toast success 
-function toastSuccess(message){
-    let toastEl = document.getElementById('errToastEl')
-    if(toastEl){
-        toastEl.classList.remove('bg-success', 'bg-primary', 'bg-danger');
-        toastEl.classList.add('bg-success');  
-        toastEl.querySelector('.toast-body').innerHTML = message; 
-        let toast = bootstrap.Toast.getInstance(toastEl)
-        toast.show()
-        return
+
+/* Toast Utility methods */
+function _getOrCreateToastWrapper() {
+    var toastWrapper = document.querySelector('body > [data-toast-wrapper]');
+    if (!toastWrapper) {
+        toastWrapper = document.createElement('div');
+        toastWrapper.style.zIndex = 11;
+        toastWrapper.style.position = 'fixed';
+        toastWrapper.style.bottom = 0;
+        toastWrapper.style.right = 0;
+        toastWrapper.style.padding = '1rem';
+        toastWrapper.setAttribute('data-toast-wrapper', '');
+        document.body.append(toastWrapper);
     }
-    console.error('Cant show error, element '+ elementID+' not found')
+    return toastWrapper;
+}
+
+function _buildToastBody(text) {
+    var toastBodyWrapper = document.createElement('div');
+    toastBodyWrapper.classList.add('d-flex'); 
+
+    var toastBody = document.createElement('div');
+    toastBody.setAttribute('class', 'toast-body');
+
+    var img = document.createElement('img');
+    img.setAttribute('class', 'rounded me-2');
+    img.setAttribute('src', '');
+    img.setAttribute('alt', '');
+
+    var closeButton = document.createElement('button');
+    closeButton.setAttribute('type', 'button');
+    closeButton.setAttribute('class', 'btn-close btn-close-white me-2 m-auto');
+    closeButton.setAttribute('data-bs-dismiss', 'toast');
+    closeButton.setAttribute('data-label', 'Close');
+   
+    toastBody.textContent = text;
+    toastBodyWrapper.append(toastBody);
+    toastBodyWrapper.append(closeButton);
+
+    return toastBodyWrapper;
+}
+
+// bgColorClass 'bg-success', 'bg-primary', 'bg-danger'
+function _buildToast(text, bgColorClass, delayTime) {
+    var toast = document.createElement('div');
+
+    toast.setAttribute('class', 'toast align-items-center text-white border-0');
+    toast.classList.add(bgColorClass); 
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'assertive');
+    toast.setAttribute('aria-atomic', 'true');
+    toast.setAttribute('data-bs-delay', delayTime);
+    
+    var toastBody = _buildToastBody(text);
+    toast.append(toastBody);
+    return toast;
 }

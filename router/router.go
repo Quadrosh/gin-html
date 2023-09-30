@@ -117,7 +117,7 @@ func AuthMiddleware(db *gorm.DB, apiSecret string, role repository.UserRoleType,
 				s := sessions.Default(c)
 				s.Set(constants.SessionKeyError, resources.Forbidden())
 				_ = s.Save()
-
+				c.Abort()
 				c.Redirect(303, "/signin")
 				return
 			}
