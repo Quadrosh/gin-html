@@ -20,6 +20,16 @@ func InvalidEmailOrPassword() string {
 	return "Неверный email или пароль"
 }
 
+// InvalidPassword - Неверный пароль
+func InvalidPassword() string {
+	return "Неверный пароль"
+}
+
+// InvalidEmail - Неверный email
+func InvalidEmail() string {
+	return "Неверный email"
+}
+
 // Forbidden - Недостаточно полномочий для выполнения операции
 func Forbidden() string {
 	return "Недостаточно полномочий для выполнения операции"

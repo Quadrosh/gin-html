@@ -14,18 +14,13 @@ for (var i = 0, l = els.length; i < l; i++) {
 }
 
 
+/**
+ * Example toast call 
+ * (new ToastError('text')).show()
+ * (new ToastInfo('text')).show()
+ *  */ 
 
-
-
-
-
-/* Example toast */
-// (new ToastError('text')).show()
-// (new ToastInfo('text')).show()
-
-
-
-/* Toast constuctor */
+// ToastInfo constuctor 
 function ToastInfo(text) {
     var toastElement = _buildToast(text, 'bg-primary', 10000); // 'bg-success', 'bg-primary', 'bg-danger'
     var toastWrapper = _getOrCreateToastWrapper();
@@ -42,6 +37,7 @@ function ToastInfo(text) {
     }
 }
 
+// ToastError constuctor 
 function ToastError(text) {
     var toastElement = _buildToast(text, 'bg-danger', 15000); // 'bg-success', 'bg-primary', 'bg-danger'
     var toastWrapper = _getOrCreateToastWrapper();
@@ -58,8 +54,6 @@ function ToastError(text) {
     }
 }
 
-
-/* Toast Utility methods */
 function _getOrCreateToastWrapper() {
     var toastWrapper = document.querySelector('body > [data-toast-wrapper]');
     if (!toastWrapper) {
@@ -114,4 +108,97 @@ function _buildToast(text, bgColorClass, delayTime) {
     var toastBody = _buildToastBody(text);
     toast.append(toastBody);
     return toast;
+}
+
+
+
+
+
+/**
+ * Example modall call 
+ 
+(new Modal(
+    'Осторожно',          // title
+    'Дорогу переходят утки', // text
+    'Закрыть',            // noBtnName
+    'Да',                 // yesBtnName
+    ()=>{alert('fuck')},  // yesBtnFunction
+    )).show()
+
+ *  */ 
+
+// Modal constructor
+function Modal(title, text, noBtnName='Закрыть', yesBtnName='', yesBtnAction=()=>{}) {
+    var wrap = _buildModal(title, text, noBtnName, yesBtnName, yesBtnAction)
+    document.body.append(wrap)
+    this.bsModal = bootstrap.Modal.getOrCreateInstance(wrap);
+    this.show = function() {
+        this.bsModal.show();
+    }
+}
+
+function _buildModal(title, text, noBtnName, yesBtnName, yesBtnFunc) {
+    var modal = document.createElement('div')
+    modal.setAttribute('class', 'modal fade')
+    modal.setAttribute('tabindex', '-1')
+    modal.setAttribute('aria-labelledby', 'modalLabel')
+    modal.setAttribute('aria-hidden', 'true')
+    var modDialog = document.createElement('div')
+    modDialog.setAttribute('class', 'modal-dialog')
+    var modContent = document.createElement('div')
+    modContent.setAttribute('class', 'modal-content')
+    var header = _buildModalHeader(title)
+    modContent.append(header)
+    var body = document.createElement('div')
+    body.setAttribute('class', 'modal-body')
+    body.innerText = text
+    modContent.append(body)
+    var footer = _buildModalFooter(noBtnName, yesBtnName, yesBtnFunc)
+    modContent.append(footer)
+    modDialog.append(modContent)
+    modal.append(modDialog)
+    return modal
+}
+
+function _buildModalHeader(text) {
+    var header = document.createElement('div');
+    header.setAttribute('class', 'modal-header');
+    header.setAttribute('style', 'border-bottom: none;');
+
+    var title = document.createElement('h5');
+    title.setAttribute('class', 'modal-title');
+    title.setAttribute('id', 'modalLabel');
+    title.innerText = text
+
+    var closeBtn = document.createElement('button');
+    closeBtn.setAttribute('class', 'btn-close');
+    closeBtn.setAttribute('data-bs-dismiss', 'modal');
+    closeBtn.setAttribute('aria-label', 'Close');
+
+    header.append(title)
+    header.append(closeBtn)
+    return header
+}
+
+function _buildModalFooter(noBtnName, yesBtnName, yesBtnFunc) {
+    var footer = document.createElement('div')
+    footer.setAttribute('class', 'modal-footer')
+    footer.setAttribute('style', 'border-top: none;')
+
+    var noBtn = document.createElement('button')
+    noBtn.setAttribute('type', 'button')
+    noBtn.setAttribute('class', 'btn btn-secondary')
+    noBtn.setAttribute('data-bs-dismiss', 'modal')
+    noBtn.innerText = noBtnName
+    footer.append(noBtn)
+
+    if (yesBtnName && yesBtnFunc){
+        var yesBtn = document.createElement('button')
+        yesBtn.setAttribute('type', 'button')
+        yesBtn.setAttribute('class', 'btn btn-primary')
+        yesBtn.innerText = yesBtnName
+        yesBtn.addEventListener('click', yesBtnFunc)
+        footer.append(yesBtn)
+    }
+    return footer
 }

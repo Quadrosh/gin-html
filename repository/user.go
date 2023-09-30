@@ -1,11 +1,13 @@
 package repository
 
 import (
+	"errors"
 	"sync"
 	"time"
 
 	"github.com/quadrosh/gin-html/helpers"
 	"github.com/quadrosh/gin-html/internal/utils"
+	resources "github.com/quadrosh/gin-html/resources/ru"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -155,11 +157,11 @@ func (u *User) SignIn(db *gorm.DB, email, pswd string) error {
 		Where(&User{Email: email}).
 		Take(&checkUser).Error
 	if err != nil {
-		return err
+		return errors.New(resources.InvalidEmail())
 	}
 
 	if err := checkUser.verifyPassword(pswd); err != nil {
-		return err
+		return errors.New(resources.InvalidPassword())
 	}
 
 	if err := db.Model(User{}).

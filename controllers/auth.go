@@ -207,7 +207,7 @@ func (ctl *Controller) SigninPost(ctx *gin.Context) {
 	)
 	err := user.SignIn(db, form.Email, form.Password)
 	if err != nil {
-		ctl.ErrorJSON(ctx, errors.New(resources.InvalidEmailOrPassword()))
+		ctl.ErrorJSON(ctx, err)
 		return
 	}
 
