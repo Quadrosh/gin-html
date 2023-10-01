@@ -131,7 +131,7 @@
                     setAccessToken(data.access_token)
                 }
                 if(data.success) {
-                    toastInfo('Вы успешно авторизованы')
+                    (new ToastInfo('Авторизация прошла успешно')).show()
                 }
 
                 if(data.redirect){

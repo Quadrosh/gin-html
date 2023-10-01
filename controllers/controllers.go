@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/quadrosh/gin-html/config"
 	"github.com/quadrosh/gin-html/internal/constants"
@@ -61,6 +62,24 @@ func (ctl *Controller) GetPagination(r *http.Request) repository.Pagination {
 	return result
 }
 
+// GetStringFromSession gets string value by key from session and clear it
+func (ctl *Controller) GetStringFromSession(ctx *gin.Context, key string, clearValue bool) string {
+	var session = sessions.Default(ctx)
+	value, _ := session.Get(key).(string)
+	if value != "" && clearValue {
+		session.Set(key, nil)
+		session.Save()
+	}
+	return value
+}
+
+// SetToSession set value to session
+func (ctl *Controller) SetToSession(ctx *gin.Context, key string, value interface{}) {
+	var session = sessions.Default(ctx)
+	session.Set(key, value)
+	session.Save()
+}
+
 // Ping - ping-pong test
 // @Summary ping-pong test
 // @Description test of working server
@@ -69,7 +88,7 @@ func (ctl *Controller) GetPagination(r *http.Request) repository.Pagination {
 // @Produce  json
 // @Success 200  "Success"
 // @Router /ping [GET]
-func (c *Controller) Ping(ctx *gin.Context) {
+func (ctl *Controller) Ping(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "pong",
 	})

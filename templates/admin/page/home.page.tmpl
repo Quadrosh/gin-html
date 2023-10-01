@@ -1,13 +1,23 @@
-
 {{template "admin" .}}
-
-
 {{define "content"}}
-
-
- <h1>{{ .title }}  page admin</h1> 
+ <h1>{{ .Title }}</h1> 
  
 
 
-{{end}}
 
+{{end}}
+{{define "js"}}
+<script>
+
+let _err = "{{.Error }}"
+if(_err ){
+    (new ToastError(_err)).show()
+}
+
+let _info = "{{.Info }}"
+if(_info){
+    (new ToastInfo(_info)).show()
+}
+
+</script>
+{{end}}

@@ -10,7 +10,16 @@ import (
 	"github.com/quadrosh/gin-html/render"
 	"github.com/quadrosh/gin-html/repository"
 	resources "github.com/quadrosh/gin-html/resources/ru"
+	"github.com/quadrosh/gin-html/responses"
 )
+
+// AdminHomePageResponse response to AdminHomePage
+type AdminHomePageResponse struct {
+	responses.OkResponse
+
+	PageMeta
+	CSRFResponse
+}
 
 // AdminHomePage - admin home page
 // @Summary admin home page
@@ -29,8 +38,15 @@ func (ctl *Controller) AdminHomePage(ctx *gin.Context) {
 		ctl.ErrorPage(ctx, http.StatusBadRequest, errors.New(resources.UserNotFound()))
 	}
 
-	render.AdminTemplate(ctl.App, ctl.Engine, ctx, "home.page.tmpl", ResponseMap{
-		"title": "AdminHomePage()" + user.FirstName + " " + user.LastName,
+	render.AdminTemplate(ctl.App, ctl.Engine, ctx, "home.page.tmpl", &AdminHomePageResponse{
+		OkResponse: responses.OkResponse{
+			Success: true,
+			Info:    ctl.GetStringFromSession(ctx, constants.SessionKeyInfo, true),
+		},
+
+		PageMeta: PageMeta{
+			Title: "AdminHomePage()" + user.FirstName + " " + user.LastName,
+		},
 	})
 
 }

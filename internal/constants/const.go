@@ -7,6 +7,7 @@ const (
 	RedirectErrURL          = "/error"
 	ContextKeyRedirectError = "redirectError"
 	SessionKeyError         = "_sessionError"
+	SessionKeyInfo          = "_sessionInfo"
 
 	DefaultEntriesCount = 20
 )

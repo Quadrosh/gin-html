@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/quadrosh/gin-html/internal/auth"
 	"github.com/quadrosh/gin-html/internal/constants"
@@ -165,17 +164,12 @@ func (ctl *Controller) PasswordResetPOST(ctx *gin.Context) {
 // @Router /signin [GET]
 func (ctl *Controller) SigninPage(ctx *gin.Context) {
 
-	var session = sessions.Default(ctx)
-	err, _ := session.Get(constants.SessionKeyError).(string)
-	if err != "" {
-		session.Set(constants.SessionKeyError, nil)
-		session.Save()
-	}
+	var sErr = ctl.GetStringFromSession(ctx, constants.SessionKeyError, true)
 
 	if err := render.MainTemplate(ctl.App, ctl.Engine, ctx, "signin.page.tmpl", &SigninPageResponse{
 		OkResponse: responses.OkResponse{
 			Success: true,
-			Error:   err,
+			Error:   sErr,
 		},
 		PageMeta: PageMeta{
 			Title: "Sign in page()", // TODO from pages,
@@ -237,6 +231,8 @@ func (ctl *Controller) SigninPost(ctx *gin.Context) {
 	if user.Can(db, repository.UserCanSettings{Rule: repository.UserRuleRoleUser}) {
 		redirect = SigninRedirectToUser
 	}
+
+	ctl.SetToSession(ctx, constants.SessionKeyInfo, resources.SignedInSuccessful())
 
 	responses.JsonOK(ctx, SigninResponse{
 		OkResponse:  responses.OkResponse{Success: true},

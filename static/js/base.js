@@ -22,7 +22,7 @@ for (var i = 0, l = els.length; i < l; i++) {
 
 // ToastInfo constuctor 
 function ToastInfo(text) {
-    var toastElement = _buildToast(text, 'bg-primary', 10000); // 'bg-success', 'bg-primary', 'bg-danger'
+    var toastElement = _buildToast(text, 'bg-primary', 6000); // 'bg-success', 'bg-primary', 'bg-danger'
     var toastWrapper = _getOrCreateToastWrapper();
     toastWrapper.append(toastElement);
     this.bootstrapToast = bootstrap.Toast.getOrCreateInstance(toastElement);
@@ -39,7 +39,7 @@ function ToastInfo(text) {
 
 // ToastError constuctor 
 function ToastError(text) {
-    var toastElement = _buildToast(text, 'bg-danger', 15000); // 'bg-success', 'bg-primary', 'bg-danger'
+    var toastElement = _buildToast(text, 'bg-danger', 10000); // 'bg-success', 'bg-primary', 'bg-danger'
     var toastWrapper = _getOrCreateToastWrapper();
     toastWrapper.append(toastElement);
     this.bootstrapToast = bootstrap.Toast.getOrCreateInstance(toastElement);

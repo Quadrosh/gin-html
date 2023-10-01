@@ -13,6 +13,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/quadrosh/gin-html/config"
 	"github.com/quadrosh/gin-html/controllers"
+	"github.com/quadrosh/gin-html/forms"
 	"github.com/quadrosh/gin-html/router"
 	"gorm.io/gorm"
 )
@@ -37,6 +38,8 @@ func RunServer(
 	db *gorm.DB,
 	app *config.AppConfig,
 ) {
+
+	_ = forms.InitValidator()
 
 	var ctl = &controllers.Controller{
 		App: app,

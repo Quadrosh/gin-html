@@ -78,6 +78,7 @@ func InitRoutes(ctl *controllers.Controller) *gin.Engine {
 	adminRoute.GET("", ctl.AdminHomePage)
 	adminRoute.GET("/pages", ctl.AdminPageIndexPage)
 	adminRoute.GET("/page/create", ctl.AdminPageCreatePage)
+	adminRoute.POST("/page/create", ctl.AdminPageCreatePost)
 
 	userRoute := router.Group("/user")
 	userRoute.Use(AuthMiddleware(ctl.Db, ctl.App.ApiSecret, repository.UserRoleTypeUser, router))

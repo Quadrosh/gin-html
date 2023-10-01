@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/quadrosh/gin-html/render"
 	"github.com/quadrosh/gin-html/repository"
 	"github.com/quadrosh/gin-html/responses"
@@ -34,7 +35,7 @@ type AdminPageFormPageResponse struct {
 	Page               adminPageEntry
 	PageTypeConstMap   map[string]repository.PageType
 	PageStatusConstMap map[string]repository.PageStatus
-	Form               AdminEditPageForm
+	Form               AdminPageForm
 
 	CSRFResponse
 	PageMeta
@@ -98,25 +99,9 @@ func (ctl *Controller) AdminPageIndexPage(ctx *gin.Context) {
 	}
 }
 
-// AdminEditPageForm  page entry form for admin
-type AdminEditPageForm struct {
-	URL             string `form:"url" `
-	Type            string `form:"type" binding:"required"`
-	ArticleID       string `form:"article_id" `
-	Hrurl           string `form:"hrurl" binding:"required"`
-	Title           string `form:"title" `
-	Description     string `form:"description" `
-	Keywords        string `form:"keywords" `
-	H1              string `form:"h1" `
-	PageDescription string `form:"page_description" `
-	Text            string `form:"text" `
-	Status          string `form:"status" `
-	Errors          map[string][]string
-}
-
-// AdminPageCreatePage - Админка -> создание страницы
-// @Summary Страница создания страницы
-// @Description Админка - Страница создания страницы
+// AdminPageCreatePage - create Page page
+// @Summary Page for create Page model
+// @Description Page for create Page model by admin
 // @ID AdminPageCreatePage
 // @Tags admin page
 // @Produce  html
@@ -125,7 +110,7 @@ type AdminEditPageForm struct {
 func (ctl *Controller) AdminPageCreatePage(ctx *gin.Context) {
 
 	// form, _ := ctx.App.Session.Get(r.Context(), "form").(forms.Form)
-	var form AdminEditPageForm
+	var form AdminPageForm
 
 	// if err := ctx.ShouldBind(&form); err != nil {
 	// 	ctl.ErrorJSON(ctx, err)
@@ -146,8 +131,123 @@ func (ctl *Controller) AdminPageCreatePage(ctx *gin.Context) {
 		PageStatusConstMap: repository.PageStatusConstMap,
 		Page:               entry,
 		Form:               form,
+		PageMeta: PageMeta{
+			Title: "Edit page form",
+		},
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+// AdminPageForm  page entry form for admin
+type AdminPageForm struct {
+	URL             string `form:"url" `
+	Type            string `form:"type" binding:"required"`
+	ArticleID       string `form:"article_id" `
+	Hrurl           string `form:"hrurl" binding:"required"`
+	Title           string `form:"title"  binding:"required,max_length=130" `
+	Description     string `form:"description" binding:"max_length=250" `
+	Keywords        string `form:"keywords" `
+	H1              string `form:"h1" `
+	PageDescription string `form:"page_description" `
+	Text            string `form:"text" `
+	Status          string `form:"status"  binding:"required"`
+	Errors          map[string][]string
+}
+
+// AdminPageCreatePost - create Page post request
+// @Summary Create Page model post
+// @Description Create Page model by admin, post request
+// @ID AdminPageCreatePost
+// @Tags admin page post
+// @Produce  json
+// @Success 200 {object} AdminArtistFormPageResponse "Success"
+// @Router /admin/page/create [POST]
+func (ctl *Controller) AdminPageCreatePost(ctx *gin.Context) {
+
+	// var pageURL = "/admin/page/create"
+
+	var form AdminPageForm
+
+	if err := ctx.ShouldBindWith(&form, binding.Form); err != nil {
+		ctl.ErrorJSON(ctx, err)
+		// отобразить страницу с ошибками
+		// ctx.Redirect(303, pageURL)
+
+		return
+	}
+
+	// if !form.Valid() {
+	// 	// отобразить страницу с ошибками
+	// 	ctx.App.Session.Put(r.Context(), "form", form)
+	// 	http.Redirect(w, r, pageURL, http.StatusSeeOther)
+	// 	return
+	// }
+
+	// var (
+	// 	ctxDatabase, _ = r.Context().Value(middleware.ContextKeyDatabase).(*gorm.DB)
+	// 	page           = repository.Page{}
+	// )
+
+	// page.Artist = repository.Artist{}
+
+	// artistIDStr := r.Form.Get("artist_id")
+	// if artistIDStr != "" && artistIDStr != "0" {
+	// 	_artistID, err := strconv.ParseUint(artistIDStr, 10, 32)
+	// 	if err != nil {
+	// 		ctx.App.Session.Put(r.Context(), "error", err.Error())
+	// 		ctx.App.Session.Put(r.Context(), "form", form)
+	// 		http.Redirect(w, r, pageURL, http.StatusSeeOther)
+	// 		return
+	// 	}
+	// 	// _uintArtistID := uint(_artistID)
+	// 	var artist = repository.Artist{}
+	// 	err = artist.GetByID(ctxDatabase, uint32(_artistID))
+	// 	if err != nil || artist.ID == 0 {
+	// 		ctx.App.Session.Put(r.Context(), "error", resources.ArtistNotFound(uint32(_artistID)))
+	// 		ctx.App.Session.Put(r.Context(), "form", form)
+	// 		http.Redirect(w, r, pageURL, http.StatusSeeOther)
+	// 		return
+	// 	}
+	// 	page.Artist = artist
+	// 	// page.ArtistID = &_uintArtistID
+	// } else {
+	// 	page.ArtistID = nil
+	// }
+
+	// page.Hrurl = r.Form.Get("hrurl")
+	// page.Title = r.Form.Get("title")
+	// page.Description = r.Form.Get("description")
+	// page.Keywords = r.Form.Get("keywords")
+	// page.H1 = r.Form.Get("h1")
+	// page.PageDescription = r.Form.Get("page_description")
+	// page.Text = r.Form.Get("text")
+
+	// statusInt, err := strconv.Atoi(r.Form.Get("status"))
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// page.Status = repository.PageStatus(statusInt)
+
+	// typeInt, err := strconv.Atoi(r.Form.Get("type"))
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// page.Type = repository.PageType(typeInt)
+
+	// if err := page.Save(ctxDatabase); err != nil {
+	// 	ctx.App.Session.Put(r.Context(), "error", err.Error())
+	// 	ctx.App.Session.Put(r.Context(), "form", form)
+	// 	http.Redirect(w, r, pageURL, http.StatusSeeOther)
+	// 	return
+	// }
+
+	// ctx.App.Session.Remove(r.Context(), "form")
+
+	// http.Redirect(w, r, fmt.Sprintf("/admin/page/%s", strconv.FormatUint(uint64(page.ID), 10)), http.StatusSeeOther)
+	// return
+
+	ctx.Redirect(303, "/admin/page/newPageID")
+	return
 }
