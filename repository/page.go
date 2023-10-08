@@ -1,9 +1,16 @@
 package repository
 
-import "gorm.io/gorm"
+import (
+	"fmt"
+	"sync"
+
+	"gorm.io/gorm"
+)
 
 // PageStatus статус страницы
 type PageStatus uint
+
+var PageMutex = &sync.Mutex{}
 
 const (
 	// PageStatusDraft черновик
@@ -46,6 +53,7 @@ type Page struct {
 	PageDescription string     `gorm:"size:1000;null;" json:"page_description" db:"page_description"`
 	Text            string     `gorm:"null;" json:"text" db:"text"`
 	Status          PageStatus `gorm:"null" json:"status" db:"status"`
+	ArticleID       *uint      `gorm:"null;" json:"article_id" db:"article_id"`
 }
 
 // Pages are pages
@@ -77,4 +85,64 @@ func (ps *Pages) GetAllPaged(db *gorm.DB, page Pagination) (int, error) {
 		return 0, err
 	}
 	return int(count), nil
+}
+
+// GetByID - get page by ID. Fill 'p' variable
+func (p *Page) GetByID(db *gorm.DB, id uint32) error {
+	// err := u.preload(db).
+	err := db.
+		// Preload("Article").
+		Where("id = ?", id).
+		Find(p).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// ByURL - get page by URL. Fill 'p' variable
+func (p *Page) ByURL(db *gorm.DB, URL string) error {
+	err := db.
+		// Preload("Article").
+		Where("hrurl = ?", URL).
+		Find(p).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Save - сохранить
+func (p *Page) Save(db *gorm.DB) error {
+	if err := db.Save(p).Error; err != nil {
+		return err
+	}
+
+	return p.GetByID(db, p.ID)
+}
+
+// Delete - Удалить PlaylistItem
+func (p *Page) Delete(db *gorm.DB, noTransaction bool) error {
+	PageMutex.Lock()
+	defer PageMutex.Unlock()
+
+	var err error
+	var action = func(tx *gorm.DB) error {
+		if tErr := tx.Delete(p).Error; tErr != nil {
+			return tErr
+		}
+		return nil
+	}
+
+	if noTransaction {
+		err = action(db)
+	} else {
+		err = db.Transaction(action)
+	}
+
+	if err != nil {
+		return fmt.Errorf("Delete() failed: %w", err)
+	}
+
+	return nil
 }

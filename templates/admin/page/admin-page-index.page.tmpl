@@ -67,11 +67,13 @@
             </tbody>
         </table>
 
+       
+
         {{$pagination := .Pagination }}
-        <div class="mb-5 mt-2 text-right">  
+        <div class="mb-5 mt-2 text-end">  
                 <span>Объектов на страницу</span> 
-                <select class="itemsToPageSelect" 
-                        id="pageSizeSelect"
+                <select id="pageSizeSelect" class="itemsToPageSelect form-select" 
+                        style="width: 70px;display: inline-block; margin-right: 1rem;"
                         data-page="{{$pagination.CurrentPage}}"
                         data-last="{{$pagination.ItemLast}}"
                         data-total="{{$pagination.Total}}"
@@ -82,18 +84,22 @@
                 </select>
                 <span>
                   {{$pagination.ItemFirst}} - {{$pagination.ItemLast}}
-                </span> из <span>{{$pagination.Total}}</span>
+                </span> из <span style="margin-right: 1rem;">{{$pagination.Total}}</span>
                 
                 <button 
                     class="btn btn-secondary {{if gt $pagination.CurrentPage 1}}active{{end}}"
                     id="controlGoToPrevPage"
+                    title="Previous page"
+                    {{if eq $pagination.CurrentPage 1 }} disabled {{end}}
                     onclick="goToPrevPage()"
-                    ><</button>
+                    ><i class="bi bi-chevron-left"></i></button>
                 <button 
                     class="btn btn-secondary {{if lt $pagination.ItemLast $pagination.Total}}active{{end}}"
                     id="controlGoToNextPage"
+                    title="Next page"
+                    {{if ge $pagination.ItemLast $pagination.Total }} disabled {{end}}
                     onclick="goToNextPage()"
-                    >></button>
+                    ><i class="bi bi-chevron-right"></i></button>
         </div>
 
     </div>

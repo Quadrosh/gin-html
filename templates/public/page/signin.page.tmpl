@@ -65,17 +65,8 @@
 {{end}}<!-- content  -->
 
 
-
+{{define "page_js"}}
 <script>
-
- 
-
-    let _err = "{{.Error }}"
-    if(_err ){
-        (new ToastError(_err)).show()
-    }
-
-
 
     let signinForm = document.getElementById('signinForm');
     signinForm.addEventListener('submit', function(e) {
@@ -145,4 +136,4 @@
    
        
 </script>
-<!--  notifyModal('!',data.message,"","ОК") -->
+{{end}}

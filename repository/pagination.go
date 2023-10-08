@@ -1,6 +1,8 @@
 package repository
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 // Pagination - paging structure
 type Pagination struct {
@@ -28,7 +30,9 @@ func (p *Pagination) SetTotal(total int) {
 	} else {
 		p.ItemFirst = 1
 	}
-	if p.Total-p.ItemFirst > p.PageSize {
+
+	var firstItemAndAfter = p.Total - p.ItemFirst + 1
+	if firstItemAndAfter > p.PageSize {
 		p.ItemLast = p.ItemFirst + p.PageSize - 1
 	} else {
 		p.ItemLast = p.ItemFirst + (p.Total - p.ItemFirst)

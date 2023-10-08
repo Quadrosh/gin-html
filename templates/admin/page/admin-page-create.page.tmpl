@@ -11,7 +11,6 @@
         <a href="/admin/pages">Страницы</a> > 
         Создание
     </div>
-  {{$isActionCreateNew := true }}
   {{template "admin_page_form" .}}
 
   </div>
@@ -20,3 +19,6 @@
 {{end}}
 
 
+{{define "page_js"}}
+  {{block "admin_page_form_js" .}}{{end}}
+{{end}}

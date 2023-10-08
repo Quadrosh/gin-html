@@ -76,7 +76,7 @@ func (ctl *Controller) PasswordResetPage(ctx *gin.Context) {
 		return
 	}
 
-	render.MainTemplate(ctl.App, ctl.Engine, ctx, "password-reset.page.tmpl", ResponseMap{
+	render.PublicTemplate(ctl.App, ctl.Engine, ctx, "password-reset.page.tmpl", ResponseMap{
 		"title":      "AdminHomePage()", // TODO from pages
 		"token":      token,
 		"first_name": user.FirstName,
@@ -108,13 +108,13 @@ func (ctl *Controller) PasswordResetPOST(ctx *gin.Context) {
 
 	var token = ctx.Param("token")
 	if token == "" {
-		ctl.ErrorJSON(ctx, errors.New("token not found"))
+		ctl.ErrorJSON(ctx, errors.New("token not found"), true)
 		return
 	}
 
 	var form PasswordResetForm
 	if err := ctx.ShouldBind(&form); err != nil {
-		ctl.ErrorJSON(ctx, err)
+		ctl.ErrorJSON(ctx, err, true)
 		return
 	}
 
@@ -124,18 +124,18 @@ func (ctl *Controller) PasswordResetPOST(ctx *gin.Context) {
 	)
 	err := user.GetByPasswordResetToken(db, token)
 	if err != nil {
-		ctl.ErrorJSON(ctx, errors.New(resources.LinkIsOld()))
+		ctl.ErrorJSON(ctx, errors.New(resources.LinkIsOld()), true)
 		return
 	}
 
 	if user.ID == 0 {
-		ctl.ErrorJSON(ctx, errors.New(resources.LinkIsOld()))
+		ctl.ErrorJSON(ctx, errors.New(resources.LinkIsOld()), true)
 		return
 	}
 
 	err = user.HashPassword(form.Password)
 	if err != nil {
-		ctl.ErrorJSON(ctx, errors.New(resources.СantHashPassword()))
+		ctl.ErrorJSON(ctx, errors.New(resources.СantHashPassword()), true)
 		return
 	}
 
@@ -145,7 +145,7 @@ func (ctl *Controller) PasswordResetPOST(ctx *gin.Context) {
 			"password_hash":        user.PasswordHash,
 			"password_reset_token": "",
 		}).Error; err != nil {
-		ctl.ErrorJSON(ctx, errors.New(resources.DatabaseSaveError()))
+		ctl.ErrorJSON(ctx, errors.New(resources.DatabaseSaveError()), true)
 		return
 	}
 
@@ -164,9 +164,9 @@ func (ctl *Controller) PasswordResetPOST(ctx *gin.Context) {
 // @Router /signin [GET]
 func (ctl *Controller) SigninPage(ctx *gin.Context) {
 
-	var sErr = ctl.GetStringFromSession(ctx, constants.SessionKeyError, true)
+	var sErr = ctl.GetSessionString(ctx, constants.SessionKeyError, true)
 
-	if err := render.MainTemplate(ctl.App, ctl.Engine, ctx, "signin.page.tmpl", &SigninPageResponse{
+	if err := render.PublicTemplate(ctl.App, ctl.Engine, ctx, "signin.page.tmpl", &SigninPageResponse{
 		OkResponse: responses.OkResponse{
 			Success: true,
 			Error:   sErr,
@@ -191,7 +191,7 @@ func (ctl *Controller) SigninPost(ctx *gin.Context) {
 
 	var form SignInForm
 	if err := ctx.ShouldBind(&form); err != nil {
-		ctl.ErrorJSON(ctx, err)
+		ctl.ErrorJSON(ctx, err, true)
 		return
 	}
 
@@ -201,26 +201,26 @@ func (ctl *Controller) SigninPost(ctx *gin.Context) {
 	)
 	err := user.SignIn(db, form.Email, form.Password)
 	if err != nil {
-		ctl.ErrorJSON(ctx, err)
+		ctl.ErrorJSON(ctx, err, true)
 		return
 	}
 
 	if !user.RoleType.CanSignIn() {
-		ctl.ErrorJSON(ctx, errors.New(resources.Forbidden()))
+		ctl.ErrorJSON(ctx, errors.New(resources.Forbidden()), true)
 		return
 	}
 
 	var token string
 	token, err = auth.CreateToken(user.ID, ctl.App.ApiTokenExpireSec, ctl.App.ApiSecret)
 	if err != nil {
-		ctl.ErrorJSON(ctx, err)
+		ctl.ErrorJSON(ctx, err, true)
 		return
 	}
 
 	// cохраняем токен в базу
 	err = user.UpdateAuthKey(db, token)
 	if err != nil {
-		ctl.ErrorJSON(ctx, err)
+		ctl.ErrorJSON(ctx, err, true)
 		return
 	}
 
@@ -232,7 +232,10 @@ func (ctl *Controller) SigninPost(ctx *gin.Context) {
 		redirect = SigninRedirectToUser
 	}
 
-	ctl.SetToSession(ctx, constants.SessionKeyInfo, resources.SignedInSuccessful())
+	if err := ctl.SetToSession(ctx, constants.SessionKeyInfo, resources.SignedInSuccessful()); err != nil {
+		ctl.ErrorJSON(ctx, err, true)
+		return
+	}
 
 	responses.JsonOK(ctx, SigninResponse{
 		OkResponse:  responses.OkResponse{Success: true},

@@ -15,27 +15,28 @@ import (
 
 // AppConfig is application config
 type AppConfig struct {
-	UseCache           bool
-	MainTemplateCache  map[string]*template.Template
-	AdminTemplateCache map[string]*template.Template
-	InfoLog            *log.Logger
-	ErrorLog           *log.Logger
-	InProduction       bool
-	MailSMTP           string
-	MailPort           int
-	MailLogin          string
-	MailPassword       string
-	MailEncrypted      bool
-	MailFrom           string
-	MailTo             string
-	SmsTo              string
-	SmsKey             string
-	AllowOrigin        string
-	IsDebug            bool
-	IsDbDebug          bool
-	ApiTokenExpireSec  uint
-	ApiSecret          string
-	CWD                string
+	UseCache            bool
+	UserTemplateCache   map[string]*template.Template
+	PublicTemplateCache map[string]*template.Template
+	AdminTemplateCache  map[string]*template.Template
+	InfoLog             *log.Logger
+	ErrorLog            *log.Logger
+	InProduction        bool
+	MailSMTP            string
+	MailPort            int
+	MailLogin           string
+	MailPassword        string
+	MailEncrypted       bool
+	MailFrom            string
+	MailTo              string
+	SmsTo               string
+	SmsKey              string
+	AllowOrigin         string
+	IsDebug             bool
+	IsDbDebug           bool
+	ApiTokenExpireSec   uint
+	ApiSecret           string
+	CWD                 string
 	LocalConfig
 }
 

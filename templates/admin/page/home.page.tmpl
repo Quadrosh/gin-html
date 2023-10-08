@@ -6,18 +6,9 @@
 
 
 {{end}}
-{{define "js"}}
+{{define "page_js"}}
 <script>
 
-let _err = "{{.Error }}"
-if(_err ){
-    (new ToastError(_err)).show()
-}
-
-let _info = "{{.Info }}"
-if(_info){
-    (new ToastInfo(_info)).show()
-}
 
 </script>
 {{end}}

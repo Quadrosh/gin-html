@@ -41,7 +41,7 @@ func (ctl *Controller) AdminHomePage(ctx *gin.Context) {
 	render.AdminTemplate(ctl.App, ctl.Engine, ctx, "home.page.tmpl", &AdminHomePageResponse{
 		OkResponse: responses.OkResponse{
 			Success: true,
-			Info:    ctl.GetStringFromSession(ctx, constants.SessionKeyInfo, true),
+			Info:    ctl.GetSessionString(ctx, constants.SessionKeyInfo, true),
 		},
 
 		PageMeta: PageMeta{

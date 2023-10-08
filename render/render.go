@@ -59,24 +59,24 @@ func CreateTemplateCache(path string, funcs template.FuncMap) (map[string]*templ
 	return tMap, nil
 }
 
-// MainTemplate render main template
-func MainTemplate(
+// PublicTemplate render main template
+func PublicTemplate(
 	app *config.AppConfig,
 	engine *gin.Engine,
 	ctx *gin.Context,
 	tmplName string,
 	obj iCSRF) error {
-	var pathToMainTemplates = filepath.Join(app.CWD, "templates/main")
+	var templatesPath = filepath.Join(app.CWD, "templates/public")
 
 	var functions = template.FuncMap{}
 
 	var tCache map[string]*template.Template
-	if app.UseCache && app.MainTemplateCache != nil {
-		tCache = app.MainTemplateCache
+	if app.UseCache && app.PublicTemplateCache != nil {
+		tCache = app.PublicTemplateCache
 	} else {
-		tCache, _ = CreateTemplateCache(pathToMainTemplates, functions)
-		if app.MainTemplateCache == nil {
-			app.MainTemplateCache = tCache
+		tCache, _ = CreateTemplateCache(templatesPath, functions)
+		if app.PublicTemplateCache == nil {
+			app.PublicTemplateCache = tCache
 		}
 	}
 
@@ -97,17 +97,17 @@ func AdminTemplate(
 	ctx *gin.Context,
 	tmplName string,
 	obj iCSRF) error {
-	var pathToMainTemplates = filepath.Join(app.CWD, "templates/admin")
+	var templatesPath = filepath.Join(app.CWD, "templates/admin")
 
 	var functions = template.FuncMap{}
 
 	var tCache map[string]*template.Template
-	if app.UseCache && app.MainTemplateCache != nil {
-		tCache = app.MainTemplateCache
+	if app.UseCache && app.PublicTemplateCache != nil {
+		tCache = app.PublicTemplateCache
 	} else {
-		tCache, _ = CreateTemplateCache(pathToMainTemplates, functions)
-		if app.MainTemplateCache == nil {
-			app.MainTemplateCache = tCache
+		tCache, _ = CreateTemplateCache(templatesPath, functions)
+		if app.PublicTemplateCache == nil {
+			app.PublicTemplateCache = tCache
 		}
 	}
 	t, ok := tCache[tmplName]
@@ -127,17 +127,17 @@ func UserTemplate(
 	ctx *gin.Context,
 	tmplName string,
 	obj iCSRF) error {
-	var pathToMainTemplates = filepath.Join(app.CWD, "templates/user")
+	var templatesPath = filepath.Join(app.CWD, "templates/user")
 
 	var functions = template.FuncMap{}
 
 	var tCache map[string]*template.Template
-	if app.UseCache && app.MainTemplateCache != nil {
-		tCache = app.MainTemplateCache
+	if app.UseCache && app.UserTemplateCache != nil {
+		tCache = app.UserTemplateCache
 	} else {
-		tCache, _ = CreateTemplateCache(pathToMainTemplates, functions)
-		if app.MainTemplateCache == nil {
-			app.MainTemplateCache = tCache
+		tCache, _ = CreateTemplateCache(templatesPath, functions)
+		if app.UserTemplateCache == nil {
+			app.UserTemplateCache = tCache
 		}
 	}
 	t, ok := tCache[tmplName]

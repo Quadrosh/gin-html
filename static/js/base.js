@@ -185,12 +185,14 @@ function _buildModalFooter(noBtnName, yesBtnName, yesBtnFunc) {
     footer.setAttribute('class', 'modal-footer')
     footer.setAttribute('style', 'border-top: none;')
 
-    var noBtn = document.createElement('button')
-    noBtn.setAttribute('type', 'button')
-    noBtn.setAttribute('class', 'btn btn-secondary')
-    noBtn.setAttribute('data-bs-dismiss', 'modal')
-    noBtn.innerText = noBtnName
-    footer.append(noBtn)
+    if (noBtnName){
+        var noBtn = document.createElement('button')
+        noBtn.setAttribute('type', 'button')
+        noBtn.setAttribute('class', 'btn btn-secondary')
+        noBtn.setAttribute('data-bs-dismiss', 'modal')
+        noBtn.innerText = noBtnName
+        footer.append(noBtn)
+    } 
 
     if (yesBtnName && yesBtnFunc){
         var yesBtn = document.createElement('button')

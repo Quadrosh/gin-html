@@ -1,12 +1,13 @@
 package router
 
 import (
+	"encoding/gob"
 	"errors"
 	"net/http"
 
 	"github.com/gin-contrib/secure"
 	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
+	gormsessions "github.com/gin-contrib/sessions/gorm"
 	"github.com/gin-gonic/gin"
 	"github.com/quadrosh/gin-html/controllers"
 	"github.com/quadrosh/gin-html/internal/auth"
@@ -25,6 +26,15 @@ func InitRoutes(ctl *controllers.Controller) *gin.Engine {
 	// router := gin.New()
 	// router.Use(gin.Recovery())
 
+	router.Use(CORSMiddleware())
+
+	registerStructsForSession()
+
+	var store = gormsessions.NewStore(ctl.Db, true, []byte(ctl.App.ApiSecret))
+	// var store = cookie.NewStore([]byte(ctl.App.ApiSecret))
+
+	router.Use(sessions.Sessions("ginSessionStore", store))
+
 	router.Use(secure.New(secure.Config{
 		ContentTypeNosniff: true,
 		BrowserXssFilter:   true,
@@ -32,8 +42,6 @@ func InitRoutes(ctl *controllers.Controller) *gin.Engine {
 		ReferrerPolicy: "strict-origin-when-cross-origin",
 	}))
 
-	var store = cookie.NewStore([]byte("secret"))
-	router.Use(sessions.Sessions("mysession", store))
 	router.Use(csrf.Middleware(csrf.Options{
 		Secret: ctl.App.ApiSecret,
 		ErrorFunc: func(c *gin.Context) {
@@ -41,7 +49,6 @@ func InitRoutes(ctl *controllers.Controller) *gin.Engine {
 			c.Abort()
 		},
 	}))
-	router.Use(CORSMiddleware())
 	router.Use(gin.Recovery())
 	// router.Use(middleware.ErrorHandler())
 
@@ -50,8 +57,8 @@ func InitRoutes(ctl *controllers.Controller) *gin.Engine {
 	router.Static("/static", "./static/")
 
 	router.GET("/ping", ctl.Ping)
-	router.GET("/", ctl.HomePage)
-	router.GET("/home", ctl.HomePage)
+	router.GET("/", ctl.PublicHomePage)
+	router.GET("/home", ctl.PublicHomePage)
 	router.GET("/password-reset/:token", ctl.PasswordResetPage)
 	router.POST("/password-reset-post/:token", ctl.PasswordResetPOST)
 
@@ -79,6 +86,10 @@ func InitRoutes(ctl *controllers.Controller) *gin.Engine {
 	adminRoute.GET("/pages", ctl.AdminPageIndexPage)
 	adminRoute.GET("/page/create", ctl.AdminPageCreatePage)
 	adminRoute.POST("/page/create", ctl.AdminPageCreatePost)
+	adminRoute.GET("/page/:id", ctl.AdminPageViewPage)
+	adminRoute.GET("/page/:id/edit", ctl.AdminPageEditPage)
+	adminRoute.POST("/page/:id/edit", ctl.AdminPageEditPost)
+	adminRoute.GET("/page/:id/delete", ctl.AdminPageDelete)
 
 	userRoute := router.Group("/user")
 	userRoute.Use(AuthMiddleware(ctl.Db, ctl.App.ApiSecret, repository.UserRoleTypeUser, router))
@@ -88,9 +99,16 @@ func InitRoutes(ctl *controllers.Controller) *gin.Engine {
 	return router
 }
 
+// registerStructsForSession register all structures to use in session
+func registerStructsForSession() {
+	gob.Register(controllers.AdminPageForm{})
+}
+
 // CORSMiddleware cors headers
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// origin := c.GetHeader("Origin")
+		// c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")

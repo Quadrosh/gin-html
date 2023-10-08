@@ -10,6 +10,7 @@ type OkResponse struct {
 	Success bool   `json:"success"`
 	Info    string `json:"info"`
 	Error   string `json:"error"`
+	Reload  bool   `json:"reload"`
 }
 
 func JsonOK(ctx *gin.Context, obj interface{}) {

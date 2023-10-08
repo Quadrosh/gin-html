@@ -1,0 +1,160 @@
+{{template "admin" .}}
+
+
+{{define "content"}}
+
+{{$model := .Model }}
+{{$pageTypeConstMap := .PageTypeConstMap}}
+{{$pageStatusConstMap := .PageStatusConstMap}}
+
+<div class="container-fluid my-2">
+    <div class="col-12">
+        <h1 >Страница #{{$model.ID}} {{$model.Hrurl}} {{$model.Title}}
+            <span class="text-secondary">/
+                {{if not $model.Type}} тип не определен
+                {{else if eq $model.Type 0}} тип не назначен
+                {{else if eq $model.Type (index $pageTypeConstMap "PageTypeCommon")}} Common
+                {{else if eq $model.Type (index $pageTypeConstMap "PageTypeArticle")}} Article
+                {{else}} Значение типа вне списка
+                {{end}}/ 
+            </span>
+            <sup class="text-danger">
+                {{if not $model.Status}} статус не определен
+                {{else if eq $model.Status 0}} статус не назначен
+                {{else if eq $model.Status (index $pageStatusConstMap "PageStatusDraft")}} В разработке
+                {{else if eq $model.Status (index $pageStatusConstMap "PageStatusPublished")}} Active
+           
+                {{else}}  Значение статуса вне списка
+                {{end}} 
+            </sup>
+        </h1>
+        <div class="breadCrumbs ">
+            <a href="/admin/pages">Pages</a> > #{{$model.ID}} {{$model.Hrurl}} 
+        </div>
+
+        <div class="mb-3">
+            <a class="btn btn-primary" href="/admin/page/{{$model.ID}}/edit">Редактировать</a>
+            <a class="btn btn-default" id="deleteBtn">Удалить</a>
+
+        </div>
+       
+
+       
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Параметр</th>
+                    <th>Значение</th>
+                </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                    <td>ID</td>
+                    <td>{{$model.ID}}</td>
+                </tr>
+                <tr>
+                    <td>Hrurl</td>
+                    <td>{{$model.Hrurl}}</td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td>
+                        {{if not $model.Status}} не определено
+                        {{else if eq $model.Status 0}} не назначено
+                        {{else if eq $model.Status (index $pageStatusConstMap "PageStatusDraft")}} Черновик
+                        {{else if eq $model.Status (index $pageStatusConstMap "PageStatusPublished")}} Опубликовано
+                        {{else}}  Значение вне списка
+                        {{end}} 
+                        <sup>({{$model.Status}})</sup>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Type</td>
+                    <td>
+                        {{if not $model.Type}} не определено
+                        {{else if eq $model.Type 0}} не назначено
+                        {{else if eq $model.Type (index $pageTypeConstMap "PageTypeCommon")}} Common
+                        {{else if eq $model.Type (index $pageTypeConstMap "PageTypeArticle")}} Article
+                        {{else}} Значение вне списка
+                        {{end}} 
+                        <sup>({{$model.Type}})</sup>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Title</td>
+                    <td>{{$model.Title}}</td>
+                </tr>
+             
+                <tr>
+                    <td>Description</td>
+                    <td>{{$model.Description}}</td>
+                </tr>
+
+                <tr>
+                    <td>Keywords</td>
+                    <td>{{$model.Keywords}}</td>
+                </tr>
+                <tr>
+                    <td>H1</td>
+                    <td>{{$model.H1}}</td>
+                </tr>
+                <tr>
+                    <td>PageDescription</td>
+                    <td>{{$model.PageDescription}}</td>
+                </tr>
+            
+
+                <tr>
+                    <td>Text</td>
+                    <td class="nl2br"> {{$model.Text}}</td>
+                </tr>
+    
+                <tr>
+                    <td>CreatedAt</td>
+                    <td>{{$model.CreatedAt.Format "15:04 02/01/2006"}}</td>
+                </tr>
+                <tr>
+                    <td>UpdatedAt</td>
+                    <td>{{$model.UpdatedAt.Format "15:04 02/01/2006"}}</td>
+                </tr>
+                <tr>
+                    <td>DeletedAt</td>
+                    <td>
+                        {{if not $model.DeletedAt}} нет
+                        {{else}} {{$model.DeletedAt}}
+                        {{end}} 
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+</div>
+
+
+
+{{end}}
+
+
+{{define "page_js"}}
+    <script>
+
+        let deleteBtn = document.getElementById('deleteBtn');
+        deleteBtn.addEventListener('click', function(e) {
+            e.preventDefault();            
+            (new Modal(
+                'Внимание',          // title
+                'Удалить страницу #{{.Model.ID}} {{.Model.Hrurl}} {{.Model.Title}}?', // text
+                null,            // noBtnName
+                'Удалить',                 // yesBtnName
+                ()=>{window.location = '/admin/page/{{.Model.ID}}/delete'},  // yesBtnFunction
+                )).show()
+              
+        });
+    
+    </script>
+{{end}}
+
+

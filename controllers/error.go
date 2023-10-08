@@ -18,7 +18,7 @@ import (
 // @Router /error [GET]
 func (c *Controller) ErrorPage(ctx *gin.Context, code int, e error) {
 
-	rErr := render.MainTemplate(c.App, c.Engine, ctx, "error.page.tmpl", ResponseMap{
+	rErr := render.PublicTemplate(c.App, c.Engine, ctx, "error.page.tmpl", ResponseMap{
 		"title":       "Error",
 		"description": "During execution occurs error",
 		"code":        code,
@@ -35,11 +35,12 @@ func (c *Controller) ErrorPage(ctx *gin.Context, code int, e error) {
 // @ID ErrorJSON
 // @Tags error json
 // @Produce  json
-func (c *Controller) ErrorJSON(ctx *gin.Context, err error) {
+func (c *Controller) ErrorJSON(ctx *gin.Context, err error, reload bool) {
 	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, responses.OkResponse{
 		Success: false,
 		Error:   err.Error(),
+		Reload:  reload,
 	})
 
 }

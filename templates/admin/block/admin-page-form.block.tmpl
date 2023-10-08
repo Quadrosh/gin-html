@@ -3,21 +3,23 @@
 
 {{define "admin_page_form"}}
 
-{{$page := .Page }}
+{{$model := .Model }}
+{{$form := .Form }}
 {{$pageTypeConstMap := .PageTypeConstMap}}
 {{$pageStatusConstMap := .PageStatusConstMap}}
 
+<form action="{{.Form.URL}}" name="signinForm" 
+    class="pb-5 requires-validation"  novalidate
+    method="POST" 
+    id="adminPageForm">
 
-<form action="{{.Form.URL}}" 
-        method="POST" 
-        novalidate>
     <input type="hidden" name="_csrf" value="{{.CSRFToken}}">
     <div class="row">
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="typeInput">Type</label>
 
-                <select name="type" 
+                <select name="type" required
                         id="typeInput" 
                         type="text" 
                         class="form-control" 
@@ -25,7 +27,7 @@
 
                         {{range $key, $value := $pageTypeConstMap}}
                         <option value="{{$value}}"
-                                {{if eq $value $page.Type}}selected="selected"{{end}}
+                                {{if eq $value $model.Type}}selected="selected"{{end}}
                                 >{{$key}}</option>
                         {{end}}
                     
@@ -42,9 +44,8 @@
                 <input name="article_id" 
                         id="articleIdInput"
                         type="text" 
-                        required
                         class="form-control  {{if ne (len (index .Form.Errors "article_id")) 0 }} is-invalid  {{end}}" 
-                        value="{{$page.ArticleID}}"
+                        value="{{$model.ArticleID}}"
                         aria-describedby="ArticleID"
                         >
                             
@@ -57,12 +58,11 @@
         <div class="col-sm-6">
             <div class="form-group">
                 <label for="hrurlInput"> Hrurl</label>
-                <input name="hrurl" 
+                <input name="hrurl" required
                         id="hrurlInput"
                         type="text" 
-                        required
                         class="form-control  {{if ne (len (index .Form.Errors "hrurl")) 0 }} is-invalid  {{end}}" 
-                        value="{{$page.Hrurl}}"
+                        value="{{$model.Hrurl}}"
                         aria-describedby="Hrurl"
                         >
     
@@ -78,11 +78,11 @@
         <div class="col-sm-4">
             <div class="form-group">
                 <label for="titleInput">Title</label>
-                <input name="title" 
+                <input name="title" required
                         id="titleInput" 
                         type="text" 
                         class="form-control  {{if ne (len (index .Form.Errors "title")) 0 }} is-invalid  {{end}}" 
-                        value="{{$page.Title}}"
+                        value="{{$model.Title}}"
                         aria-describedby="Title"
                         >
                 {{range (index .Form.Errors "title")}}
@@ -97,7 +97,7 @@
                         id="descriptionInput" 
                         type="text" 
                         class="form-control  {{if ne (len (index .Form.Errors "description")) 0 }} is-invalid  {{end}}" 
-                        value="{{$page.Description}}"
+                        value="{{$model.Description}}"
                         aria-describedby="Description"
                             >
                 {{range (index .Form.Errors "description")}}
@@ -113,9 +113,8 @@
                 <input name="keywords" 
                         id="keywordsInput"
                         type="text" 
-                        required
                         class="form-control  {{if ne (len (index .Form.Errors "keywords")) 0 }} is-invalid  {{end}}" 
-                        value="{{$page.Keywords}}"
+                        value="{{$model.Keywords}}"
                         aria-describedby="Keywords"
                         >
                             
@@ -132,9 +131,8 @@
                 <input name="h1" 
                         id="h1Input"
                         type="text" 
-                        required
                         class="form-control  {{if ne (len (index .Form.Errors "h1")) 0 }} is-invalid  {{end}}" 
-                        value="{{$page.H1}}"
+                        value="{{$model.H1}}"
                         aria-describedby="H1"
                         >
                             
@@ -152,7 +150,7 @@
                         rows="1"
                         class="form-control  {{if ne (len (index .Form.Errors "page_description")) 0 }} is-invalid  {{end}}" 
                         aria-describedby="PageDescription"
-                        >{{$page.PageDescription}}</textarea>        
+                        >{{$model.PageDescription}}</textarea>        
                             
                 {{range (index .Form.Errors "page_description")}}
                 <label class="text-danger"> {{.}}</label>
@@ -169,7 +167,7 @@
                         rows="3"
                         class="form-control  {{if ne (len (index .Form.Errors "text")) 0 }} is-invalid  {{end}}" 
                         aria-describedby="Text"
-                        >{{$page.Text}}</textarea>
+                        >{{$model.Text}}</textarea>
                             
                 {{range (index .Form.Errors "text")}}
                 <label class="text-danger"> {{.}}</label>
@@ -179,18 +177,18 @@
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="statusInput">Status</label>
-                <select name="status" 
+                <select name="status" required
                         id="statusInput" 
                         class="form-control  {{if ne (len (index .Form.Errors "status")) 0 }} is-invalid  {{end}}" 
                         aria-describedby="Статус">
 
                         {{range $key, $value := $pageStatusConstMap}}
                         <option value="{{$value}}" 
-                                {{if eq $value $page.Status}}selected="selected"{{end}}
+                                {{if eq $value $model.Status}}selected="selected"{{end}}
                                 >{{$key}}</option>
                         {{end}}
                         <option value="0"
-                                {{if eq 0 $page.Status}}selected="selected"{{end}}
+                                {{if eq 0 $model.Status}}selected="selected"{{end}}
                                 >не определено</option>
                 </select>
                 
@@ -210,4 +208,57 @@
 
 
 {{end}}
+{{define "admin_page_form_js"}}
+<script>
 
+
+    // let form = document.getElementById('adminPageForm');
+    // form.addEventListener('submit', function(e) {
+    //     e.preventDefault(); 
+        
+    //     // if (!form.checkValidity()) {
+    //     //     event.stopPropagation()            
+    //     //     console.log('>>>> форма невалидна !form.checkValidity()) имеет смысл при <form class="requires-validation",  ')
+    //     //     return 
+    //     // }
+    //     let formData = new FormData()
+    //     formData.append("_csrf", "{{.CSRFToken}}")
+    //     formData.append("type", e.target['type'].value)
+    //     formData.append("article_id", e.target['article_id'].value)
+    //     formData.append("hrurl", e.target['hrurl'].value)
+    //     formData.append("title", e.target['title'].value)
+    //     formData.append("description", e.target['description'].value)
+    //     formData.append("keywords", e.target['keywords'].value)
+    //     formData.append("h1", e.target['h1'].value)
+    //     formData.append("page_description", e.target['page_description'].value)
+    //     formData.append("text", e.target['text'].value)
+    //     formData.append("status", e.target['status'].value)
+
+    //     fetch("{{.Form.URL}}",{
+    //         method: "post",
+    //         body: formData,
+    //         })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             if(data.error) {
+    //                 (new ToastError(data.error)).show()
+    //             }
+    //             if(data.success) {
+    //                 (new ToastInfo('Успешно')).show()
+    //             }
+    //             if(data.info) {
+    //                 (new ToastInfo(data.info)).show()
+    //             }
+
+    //             if(data.reload){
+    //                 window.location.href = location.href
+    //             }
+
+    //             if(data.redirect){
+    //                 window.location.href = data.redirect
+    //             }
+    //     });    
+    // });
+
+</script>
+{{end}}

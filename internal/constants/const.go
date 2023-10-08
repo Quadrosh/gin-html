@@ -8,6 +8,7 @@ const (
 	ContextKeyRedirectError = "redirectError"
 	SessionKeyError         = "_sessionError"
 	SessionKeyInfo          = "_sessionInfo"
+	SessionKeyForm          = "_sessionForm"
 
 	DefaultEntriesCount = 20
 )
