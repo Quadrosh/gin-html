@@ -3,8 +3,9 @@
 
 {{define "content"}}
 
-{{$constPageType :=  .PageTypeConstMap }}
-{{$constPageStatus :=  .PageStatusConstMap }}
+{{$articleTypeConstMap :=  .ArticleTypeConstMap }}
+{{$articleStatusConstMap :=  .ArticleStatusConstMap }}
+{{$articleLayoutConstMap :=  .ArticleLayoutConstMap }}
 
 <div class="container-fluid my-2">
    
@@ -12,7 +13,7 @@
         <h1>Страницы</h1>
 
         <div class="mb-3">
-            <a class="btn btn-primary" href="/admin/page/create">Создать</a>
+            <a class="btn btn-primary" href="/admin/article/create">Создать</a>
         </div>
 
         {{$models := .Entries }}
@@ -22,10 +23,10 @@
                     <th>ID</th>
                     <th>Type</th>
                     <th>URL</th>
-                    <th>ArtistID</th>
                     <th>Title</th>
                     <th>Description</th>
                     <th>Status</th>
+                    <th>Layout</th>
                     <th>CreatedAt</th>
                     <th>UpdatedAt</th>
                 </tr>
@@ -33,30 +34,39 @@
             <tbody>
                 {{range $models}}
                 <tr>
-                    <td><a href="/admin/page/{{.ID}}">{{.ID}}</a></td>
+                    <td><a href="/admin/article/{{.ID}}">{{.ID}}</a></td>
                     <td>
                         {{if not .Type}} не определено
                         {{else if eq .Type 0}} не назначено
-                        {{else if eq .Type (index $constPageType "PageTypeCommon")}} Common
-                        {{else if eq .Type (index $constPageType "PageTypeArticle")}} Article
+                        {{else if eq .Type (index $articleTypeConstMap "ArticleTypePage")}} Page
+                        {{else if eq .Type (index $articleTypeConstMap "ArticleTypeArticle")}} Article
+                        {{else if eq .Type (index $articleTypeConstMap "ArticleTypeNews")}} News
                         {{else}} Значение вне списка
                         {{end}} 
                         <sup>({{ .Type}})</sup>
                     </td>
                     <td>{{.Hrurl}}</td>
-                    <td>
-                        ArticleID
-                    </td>
+                   
                     <td>{{.Title}}</td>
                     <td>{{.Description}}</td>
                     <td>
                         {{if not .Status}} не определено
                         {{else if eq .Status 0}} не назначено
-                        {{else if eq .Status (index $constPageStatus "PageStatusDraft")}} В разработке
-                        {{else if eq .Status (index $constPageStatus "PageStatusPublished")}} Published
+                        {{else if eq .Status (index $articleStatusConstMap "ArticleStatusDraft")}} В разработке
+                        {{else if eq .Status (index $articleStatusConstMap "ArticleStatusPublished")}} Published
                         {{else}}  Значение вне списка
                         {{end}} 
                         <sup>({{.Status}})</sup>
+                    </td>
+                    <td>
+                        {{if not .Layout}} не определено
+                        {{else if eq .Layout 0}} не назначено
+                        {{else if eq .Layout (index $articleLayoutConstMap "ArticleLayoutHome")}} Home
+                        {{else if eq .Layout (index $articleLayoutConstMap "ArticleLayoutPage")}} Page
+                        {{else if eq .Layout (index $articleLayoutConstMap "ArticleLayoutArticle")}} Article
+                        {{else}}  Значение вне списка
+                        {{end}} 
+                        <sup>({{.Layout}})</sup>
                     </td>
                     
                     <td>{{.CreatedAt.Format "15:04 02/01/2006"}}</td>
@@ -110,20 +120,20 @@
 <script>
     function onPageSelectChange(){
         let select = document.getElementById("pageSizeSelect");
-        window.location.href = '/admin/pages?page='+(select.dataset.page)+'&size='+select.value;
+        window.location.href = '/admin/articles?page='+(select.dataset.page)+'&size='+select.value;
     }
 
     function goToPrevPage(){
         let select = document.getElementById("pageSizeSelect");
         if(+select.dataset.page >1){
-            window.location.href = '/admin/pages?page='+(+select.dataset.page-1)+'&size='+select.value;
+            window.location.href = '/admin/articles?page='+(+select.dataset.page-1)+'&size='+select.value;
         }  
     }
 
     function goToNextPage(){
         let select = document.getElementById("pageSizeSelect");
         if(+select.dataset.last < +select.dataset.total){
-            window.location.href = '/admin/pages?page='+(+select.dataset.page+1)+'&size='+select.value;
+            window.location.href = '/admin/articles?page='+(+select.dataset.page+1)+'&size='+select.value;
         }
   
     }
@@ -134,8 +144,8 @@
         if (select){
             var prevBtn = document.getElementById("controlGoToPrevPage");
             var nextBtn = document.getElementById("controlGoToNextPage");
-            prevBtn.setAttribute('href', '/admin/pages?page='+(+select.dataset.page-1)+'&size='+select.value)
-            nextBtn.setAttribute('href', '/admin/pages?page='+(+select.dataset.page+1)+'&size='+select.value)
+            prevBtn.setAttribute('href', '/admin/articles?page='+(+select.dataset.page-1)+'&size='+select.value)
+            nextBtn.setAttribute('href', '/admin/articles?page='+(+select.dataset.page+1)+'&size='+select.value)
         }
     });
   

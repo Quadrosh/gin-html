@@ -1,12 +1,13 @@
 
 
 
-{{define "admin_page_form"}}
+{{define "admin_article_form"}}
 
 {{$model := .Model }}
 {{$form := .Form }}
-{{$pageTypeConstMap := .PageTypeConstMap}}
-{{$pageStatusConstMap := .PageStatusConstMap}}
+{{$pageTypeConstMap := .ArticleTypeConstMap}}
+{{$pageStatusConstMap := .ArticleStatusConstMap}}
+{{$pageLayoutConstMap := .ArticleLayoutConstMap}}
 
 <form action="{{.Form.URL}}" name="signinForm" 
     class="pb-5 requires-validation"  novalidate
@@ -39,20 +40,7 @@
         </div>
 
         <div class="col-sm-3">
-            <div class="form-group">
-                <label for="articleIdInput">ArticleID</label>
-                <input name="article_id" 
-                        id="articleIdInput"
-                        type="text" 
-                        class="form-control  {{if ne (len (index .Form.Errors "article_id")) 0 }} is-invalid  {{end}}" 
-                        value="{{$model.ArticleID}}"
-                        aria-describedby="ArticleID"
-                        >
-                            
-                {{range (index .Form.Errors "article_id")}}
-                <label class="text-danger"> {{.}}</label>
-                {{end}}
-            </div>
+           
         </div>
 
         <div class="col-sm-6">
@@ -197,18 +185,46 @@
                 {{end}}
             </div>
         </div>
+
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="layoutInput">Layout</label>
+                <select name="layout" 
+                        id="layoutInput" 
+                        class="form-control  {{if ne (len (index .Form.Errors "layout")) 0 }} is-invalid  {{end}}" 
+                        aria-describedby="Layout">
+
+                        {{range $key, $value := $pageLayoutConstMap}}
+                        <option value="{{$value}}" 
+                                {{if eq $value $model.Layout}}selected="selected"{{end}}
+                                >{{$key}}</option>
+                        {{end}}
+                        <option value="0"
+                                {{if eq 0 $model.Layout}}selected="selected"{{end}}
+                                >не определено</option>
+                </select>
+                
+                {{range (index .Form.Errors "layout")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
         
     </div>
 
 
-    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <div class="mt-2 text-end">
+        <a href="/admin/article/{{.Model.ID}}" class="btn btn-primary">Закрыть</a>
+        <button type="submit" class="btn btn-danger">Сохранить</button>
+    </div>
+   
     </form>
 
 
 
 
 {{end}}
-{{define "admin_page_form_js"}}
+{{define "admin_article_form_js"}}
 <script>
 
 

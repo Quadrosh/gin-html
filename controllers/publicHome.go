@@ -13,7 +13,8 @@ import (
 
 type PublicHomePageResponse struct {
 	responses.OkResponse
-	Page publicPageEntry
+	Page                  publicArticleEntry
+	ArticleLayoutConstMap map[string]repository.ArticleLayout
 
 	CSRFResponse
 }
@@ -32,7 +33,7 @@ func (ctl *Controller) PublicHomePage(ctx *gin.Context) {
 
 	var (
 		db   = ctl.Db
-		page = repository.Page{}
+		page = repository.Article{}
 	)
 
 	err := page.ByURL(db, pageURL)
@@ -41,7 +42,7 @@ func (ctl *Controller) PublicHomePage(ctx *gin.Context) {
 		return
 	}
 
-	var entry publicPageEntry
+	var entry publicArticleEntry
 	err = entry.convert(&page)
 	if err != nil {
 		ctl.ErrorPage(ctx, 500, err)
@@ -54,7 +55,8 @@ func (ctl *Controller) PublicHomePage(ctx *gin.Context) {
 			Error:   ctl.GetSessionString(ctx, constants.SessionKeyError, true),
 			Info:    ctl.GetSessionString(ctx, constants.SessionKeyInfo, true),
 		},
-		Page: entry,
+		Page:                  entry,
+		ArticleLayoutConstMap: repository.ArticleLayoutConstMap,
 	})
 
 }

@@ -1,18 +1,19 @@
-{{define "admin"}}
+{{define "page"}}
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-        <title>{{.PageMeta.Title}}</title>
-        <meta name="description" content="SOME ADMIN DESCRIPTION">
+        <title>{{.Page.Title}}</title>
+        <meta name="description" content="{{.Page.Description}}">
 
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-       
-        <link rel="stylesheet" type="text/css" href="/static/style/admin.css">
+
+ 
+        <link rel="stylesheet" type="text/css" href="/static/style/base.css">
 
 
 
@@ -24,21 +25,18 @@
     </head>
     <body >
 
-
-      
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Admin panel</a>
+          <a class="navbar-brand" href="#">Gin HTML Page</a>
           <button class="navbar-toggler ml-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
             <ul class="navbar-nav w-100">
               <li class="nav-item active ms-auto">
-                <a class="nav-link" href="/admin">Home </a>
+                <a class="nav-link" href="/home">Home </a>
               </li> 
-
-              <!-- <li class="nav-item dropdown">
+              <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Dropdown
                 </a>
@@ -47,23 +45,18 @@
                   <li><a class="dropdown-item" href="#">Another action</a></li>
                   <li><a class="dropdown-item" href="#">Something else here</a></li>
                 </ul>
-              </li> -->
-
-              <li class="nav-item {{if eq .CurrentURL "/admin/articles"}} active {{end}}">
-                <a class="nav-link" 
-                   href="/admin/articles">Articles </a>
               </li>
-            
-              <li class="nav-item">
-                <a class="nav-link pointer" onclick="logout()">выйти</a>
+              <li id="signInButton" class="nav-item">
+                <a class="nav-link" href="/signin">Вход</a>
               </li>
+              <li id="signOutButton" class="nav-item">
+                <a class="nav-link pointer" onclick="logout()">Выйти</a>
+              </li> 
             </ul>
           </div>
         </div>
       </nav>
 
-    
-        
     
 
 
@@ -75,28 +68,31 @@
       
        
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>   
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 
-<script src="/static/js/auth.js"></script>
-<script src="/static/js/base.js"></script>
 
-<script>
-  let _err = "{{.Error }}"
-  if(_err ){
-      (new ToastError(_err)).show()
-  }
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-  let _info = "{{.Info }}"
-  if(_info){
-      (new ToastInfo(_info)).show()
-  }
-</script>
 
+
+        <script src="/static/js/auth.js"></script>
+        <script src="/static/js/base.js"></script>
+
+        <script>
+          let _err = "{{.Error }}"
+          if(_err ){
+              (new ToastError(_err)).show()
+          }
+        
+          let _info = "{{.Info }}"
+          if(_info){
+              (new ToastInfo(_info)).show()
+          }
+        </script>
     
-{{block "page_js" .}}
-{{end}}
+        {{block "page_js" .}}
+        {{end}}
 
      
     </body>

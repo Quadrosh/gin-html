@@ -1,0 +1,23 @@
+{{template "admin" .}}
+
+
+
+{{define "content"}}
+
+<div class="container-fluid my-2">
+  <div class="col-12">
+    {{$model := .Model }}
+    <div class="breadCrumbs ">
+        <a href="/admin/articles">Articles</a> > 
+        <a href="/admin/articles/{{$model.ID}} ">#{{$model.ID}} {{$model.Hrurl}} {{$model.Title}}</a> > 
+        Edit Article
+    </div>
+
+  {{template "admin_article_form" .}}
+
+  </div>
+</div>
+
+{{end}}
+
+

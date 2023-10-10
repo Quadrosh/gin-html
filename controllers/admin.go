@@ -38,7 +38,7 @@ func (ctl *Controller) AdminHomePage(ctx *gin.Context) {
 		ctl.ErrorPage(ctx, http.StatusBadRequest, errors.New(resources.UserNotFound()))
 	}
 
-	render.AdminTemplate(ctl.App, ctl.Engine, ctx, "home.page.tmpl", &AdminHomePageResponse{
+	if err := render.AdminTemplate(ctl.App, ctl.Engine, ctx, "home.page.tmpl", &AdminHomePageResponse{
 		OkResponse: responses.OkResponse{
 			Success: true,
 			Info:    ctl.GetSessionString(ctx, constants.SessionKeyInfo, true),
@@ -47,6 +47,8 @@ func (ctl *Controller) AdminHomePage(ctx *gin.Context) {
 		PageMeta: PageMeta{
 			Title: "AdminHomePage()" + user.FirstName + " " + user.LastName,
 		},
-	})
+	}); err != nil {
+		ctl.ErrorPage(ctx, http.StatusBadRequest, err)
+	}
 
 }

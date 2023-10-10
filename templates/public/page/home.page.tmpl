@@ -1,5 +1,16 @@
+{{$articleLayoutConstMap := .ArticleLayoutConstMap}}
 
-{{template "base" .}}
+
+{{if eq .Page.Layout (index $articleLayoutConstMap "ArticleLayoutPage")}}
+    {{template "page" .}}
+{{else if eq .Page.Layout (index $articleLayoutConstMap "ArticleLayoutHome")}}
+    {{template "home" .}}
+{{else if eq .Page.Layout (index $articleLayoutConstMap "ArticleLayoutArticle")}}
+    {{template "article" .}}    
+{{else}}
+    {{template "base" .}}
+{{end}}
+
 
 
 {{define "content"}}

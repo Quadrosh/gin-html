@@ -8,10 +8,10 @@
   <div class="col-12">
 
     <div class="breadCrumbs ">
-        <a href="/admin/pages">Страницы</a> > 
-        Создание
+        <a href="/admin/articles">Articles</a> > 
+        Create Article
     </div>
-  {{template "admin_page_form" .}}
+  {{template "admin_article_form" .}}
 
   </div>
 </div>
@@ -20,5 +20,5 @@
 
 
 {{define "page_js"}}
-  {{block "admin_page_form_js" .}}{{end}}
+  {{block "admin_article_form_js" .}}{{end}}
 {{end}}

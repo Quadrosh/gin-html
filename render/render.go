@@ -97,22 +97,27 @@ func AdminTemplate(
 	ctx *gin.Context,
 	tmplName string,
 	obj iCSRF) error {
-	var templatesPath = filepath.Join(app.CWD, "templates/admin")
+	var (
+		templatesPath = filepath.Join(app.CWD, "templates/admin")
+		tCache        map[string]*template.Template
+		err           error
+		functions     = template.FuncMap{}
+	)
 
-	var functions = template.FuncMap{}
-
-	var tCache map[string]*template.Template
 	if app.UseCache && app.PublicTemplateCache != nil {
 		tCache = app.PublicTemplateCache
 	} else {
-		tCache, _ = CreateTemplateCache(templatesPath, functions)
+		tCache, err = CreateTemplateCache(templatesPath, functions)
+		if err != nil {
+			return fmt.Errorf("CreateTemplateCache error %s", err)
+		}
 		if app.PublicTemplateCache == nil {
 			app.PublicTemplateCache = tCache
 		}
 	}
 	t, ok := tCache[tmplName]
 	if !ok {
-		return errors.New("can't get template from cache")
+		return errors.New(fmt.Sprintf(`can't find template "%s" in tCache map`, tmplName))
 	}
 	engine.SetHTMLTemplate(t)
 	obj.CSRF(ctx)

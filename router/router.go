@@ -83,13 +83,13 @@ func InitRoutes(ctl *controllers.Controller) *gin.Engine {
 	adminRoute := router.Group("/admin")
 	adminRoute.Use(AuthMiddleware(ctl.Db, ctl.App.ApiSecret, repository.UserRoleTypeAdmin, router))
 	adminRoute.GET("", ctl.AdminHomePage)
-	adminRoute.GET("/pages", ctl.AdminPageIndexPage)
-	adminRoute.GET("/page/create", ctl.AdminPageCreatePage)
-	adminRoute.POST("/page/create", ctl.AdminPageCreatePost)
-	adminRoute.GET("/page/:id", ctl.AdminPageViewPage)
-	adminRoute.GET("/page/:id/edit", ctl.AdminPageEditPage)
-	adminRoute.POST("/page/:id/edit", ctl.AdminPageEditPost)
-	adminRoute.GET("/page/:id/delete", ctl.AdminPageDelete)
+	adminRoute.GET("/articles", ctl.AdminArticleIndexPage)
+	adminRoute.GET("/article/create", ctl.AdminArticleCreatePage)
+	adminRoute.POST("/article/create", ctl.AdminArticleCreatePost)
+	adminRoute.GET("/article/:id", ctl.AdminArticleViewPage)
+	adminRoute.GET("/article/:id/edit", ctl.AdminArticleEditPage)
+	adminRoute.POST("/article/:id/edit", ctl.AdminArticleEditPost)
+	adminRoute.GET("/article/:id/delete", ctl.AdminArticleDelete)
 
 	userRoute := router.Group("/user")
 	userRoute.Use(AuthMiddleware(ctl.Db, ctl.App.ApiSecret, repository.UserRoleTypeUser, router))
@@ -101,7 +101,7 @@ func InitRoutes(ctl *controllers.Controller) *gin.Engine {
 
 // registerStructsForSession register all structures to use in session
 func registerStructsForSession() {
-	gob.Register(controllers.AdminPageForm{})
+	gob.Register(controllers.AdminArticleForm{})
 }
 
 // CORSMiddleware cors headers

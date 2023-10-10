@@ -83,6 +83,13 @@ func (ctl *Controller) SetToSession(ctx *gin.Context, key string, value interfac
 	return session.Save()
 }
 
+// SetToSession set value to session
+func (ctl *Controller) DeleteFromSession(ctx *gin.Context, key string) error {
+	var session = sessions.Default(ctx)
+	session.Delete(key)
+	return session.Save()
+}
+
 // Ping - ping-pong test
 // @Summary ping-pong test
 // @Description test of working server

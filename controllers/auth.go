@@ -42,7 +42,7 @@ type SigninPageResponse struct {
 	responses.OkResponse
 	responses.ConfirmResponse
 
-	PageMeta
+	Page publicArticleEntry
 	CSRFResponse
 }
 
@@ -164,16 +164,34 @@ func (ctl *Controller) PasswordResetPOST(ctx *gin.Context) {
 // @Router /signin [GET]
 func (ctl *Controller) SigninPage(ctx *gin.Context) {
 
-	var sErr = ctl.GetSessionString(ctx, constants.SessionKeyError, true)
+	var pageURL = "signin"
+
+	var (
+		db   = ctl.Db
+		page = repository.Article{}
+	)
+
+	err := page.ByURL(db, pageURL)
+	if err != nil {
+		page.Title = "Вход"
+		// ctl.ErrorPage(ctx, 404, errors.New(resources.PageNotFound()))
+		// return
+	}
+
+	var entry publicArticleEntry
+	err = entry.convert(&page)
+	if err != nil {
+		ctl.ErrorPage(ctx, 500, err)
+		return
+	}
 
 	if err := render.PublicTemplate(ctl.App, ctl.Engine, ctx, "signin.page.tmpl", &SigninPageResponse{
 		OkResponse: responses.OkResponse{
 			Success: true,
-			Error:   sErr,
+			Error:   ctl.GetSessionString(ctx, constants.SessionKeyError, true),
+			Info:    ctl.GetSessionString(ctx, constants.SessionKeyInfo, true),
 		},
-		PageMeta: PageMeta{
-			Title: "Sign in page()", // TODO from pages,
-		},
+		Page: entry,
 	}); err != nil {
 		log.Panic(err)
 	}

@@ -4,8 +4,9 @@
 {{define "content"}}
 
 {{$model := .Model }}
-{{$pageTypeConstMap := .PageTypeConstMap}}
-{{$pageStatusConstMap := .PageStatusConstMap}}
+{{$articleTypeConstMap := .ArticleTypeConstMap}}
+{{$articleStatusConstMap := .ArticleStatusConstMap}}
+{{$articleLayoutConstMap := .ArticleLayoutConstMap}}
 
 <div class="container-fluid my-2">
     <div class="col-12">
@@ -13,27 +14,28 @@
             <span class="text-secondary">/
                 {{if not $model.Type}} тип не определен
                 {{else if eq $model.Type 0}} тип не назначен
-                {{else if eq $model.Type (index $pageTypeConstMap "PageTypeCommon")}} Common
-                {{else if eq $model.Type (index $pageTypeConstMap "PageTypeArticle")}} Article
+                {{else if eq $model.Type (index $articleTypeConstMap "ArticleTypePage")}} Page
+                {{else if eq $model.Type (index $articleTypeConstMap "ArticleTypeArticle")}} Article
+                {{else if eq $model.Type (index $articleTypeConstMap "ArticleTypeNews")}} News
                 {{else}} Значение типа вне списка
                 {{end}}/ 
             </span>
             <sup class="text-danger">
                 {{if not $model.Status}} статус не определен
                 {{else if eq $model.Status 0}} статус не назначен
-                {{else if eq $model.Status (index $pageStatusConstMap "PageStatusDraft")}} В разработке
-                {{else if eq $model.Status (index $pageStatusConstMap "PageStatusPublished")}} Active
+                {{else if eq $model.Status (index $articleStatusConstMap "ArticleStatusDraft")}} В разработке
+                {{else if eq $model.Status (index $articleStatusConstMap "ArticleStatusPublished")}} Active
            
                 {{else}}  Значение статуса вне списка
                 {{end}} 
             </sup>
         </h1>
         <div class="breadCrumbs ">
-            <a href="/admin/pages">Pages</a> > #{{$model.ID}} {{$model.Hrurl}} 
+            <a href="/admin/articles">Articles</a> > #{{$model.ID}} {{$model.Hrurl}} 
         </div>
 
         <div class="mb-3">
-            <a class="btn btn-primary" href="/admin/page/{{$model.ID}}/edit">Редактировать</a>
+            <a class="btn btn-primary" href="/admin/article/{{$model.ID}}/edit">Редактировать</a>
             <a class="btn btn-default" id="deleteBtn">Удалить</a>
 
         </div>
@@ -62,8 +64,8 @@
                     <td>
                         {{if not $model.Status}} не определено
                         {{else if eq $model.Status 0}} не назначено
-                        {{else if eq $model.Status (index $pageStatusConstMap "PageStatusDraft")}} Черновик
-                        {{else if eq $model.Status (index $pageStatusConstMap "PageStatusPublished")}} Опубликовано
+                        {{else if eq $model.Status (index $articleStatusConstMap "ArticleStatusDraft")}} Черновик
+                        {{else if eq $model.Status (index $articleStatusConstMap "ArticleStatusPublished")}} Опубликовано
                         {{else}}  Значение вне списка
                         {{end}} 
                         <sup>({{$model.Status}})</sup>
@@ -74,8 +76,9 @@
                     <td>
                         {{if not $model.Type}} не определено
                         {{else if eq $model.Type 0}} не назначено
-                        {{else if eq $model.Type (index $pageTypeConstMap "PageTypeCommon")}} Common
-                        {{else if eq $model.Type (index $pageTypeConstMap "PageTypeArticle")}} Article
+                        {{else if eq $model.Type (index $articleTypeConstMap "ArticleTypePage")}} Page
+                        {{else if eq $model.Type (index $articleTypeConstMap "ArticleTypeArticle")}} Article
+                        {{else if eq $model.Type (index $articleTypeConstMap "ArticleTypeNews")}} News
                         {{else}} Значение вне списка
                         {{end}} 
                         <sup>({{$model.Type}})</sup>
@@ -109,6 +112,20 @@
                 <tr>
                     <td>Text</td>
                     <td class="nl2br"> {{$model.Text}}</td>
+                </tr>
+
+                <tr>
+                    <td>Layout</td>
+                    <td class="nl2br"> 
+                        {{if not $model.Layout}} не определено
+                        {{else if eq $model.Layout 0}} не назначено
+                        {{else if eq $model.Layout (index $articleLayoutConstMap "ArticleLayoutHome")}} Home
+                        {{else if eq $model.Layout (index $articleLayoutConstMap "ArticleLayoutPage")}} Page
+                        {{else if eq $model.Layout (index $articleLayoutConstMap "ArticleLayoutArticle")}} Article
+                        {{else}} Значение вне списка
+                        {{end}} 
+                        <sup>({{$model.Layout}})</sup>
+                    </td>
                 </tr>
     
                 <tr>
@@ -149,7 +166,7 @@
                 'Удалить страницу #{{.Model.ID}} {{.Model.Hrurl}} {{.Model.Title}}?', // text
                 null,            // noBtnName
                 'Удалить',                 // yesBtnName
-                ()=>{window.location = '/admin/page/{{.Model.ID}}/delete'},  // yesBtnFunction
+                ()=>{window.location = '/admin/article/{{.Model.ID}}/delete'},  // yesBtnFunction
                 )).show()
               
         });
