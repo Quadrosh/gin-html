@@ -24,4 +24,5 @@ type ActionModel struct {
 var AllModels = []interface{}{
 	&User{},
 	&Article{},
+	&ImageFile{},
 }

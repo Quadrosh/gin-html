@@ -147,12 +147,12 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-9">
+        <div class="col-sm-12">
             <div class="form-group">
                 <label for="textInput">Text</label>
                 <textarea name="text" 
                         id="textInput"
-                        rows="3"
+                        rows="2"
                         class="form-control  {{if ne (len (index .Form.Errors "text")) 0 }} is-invalid  {{end}}" 
                         aria-describedby="Text"
                         >{{$model.Text}}</textarea>
@@ -162,6 +162,210 @@
                 {{end}}
             </div>
         </div>
+        
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label for="excerptInput">Excerpt</label>
+                <textarea name="excerpt" 
+                        id="excerptInput"
+                        rows="1"
+                        class="form-control  {{if ne (len (index .Form.Errors "excerpt")) 0 }} is-invalid  {{end}}" 
+                        aria-describedby="Excerpt"
+                        >{{$model.Excerpt}}</textarea>
+                            
+                {{range (index .Form.Errors "excerpt")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- new -->
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="imageInput">Image</label>
+                <textarea name="image" 
+                        id="imageInput"
+                        rows="1"
+                        class="form-control  {{if ne (len (index .Form.Errors "image")) 0 }} is-invalid  {{end}}" 
+                        aria-describedby="Image"
+                        >{{$model.Image}}</textarea>
+                            
+                {{range (index .Form.Errors "image")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="imageAltInput">ImageAlt</label>
+                <textarea name="image_alt" 
+                        id="imageAltInput"
+                        rows="1"
+                        class="form-control  {{if ne (len (index .Form.Errors "image_alt")) 0 }} is-invalid  {{end}}" 
+                        aria-describedby="ImageAlt"
+                        >{{$model.ImageAlt}}</textarea>
+                            
+                {{range (index .Form.Errors "image_alt")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+
+        <div class="col-sm-5">
+            <div class="form-group">
+                <label for="imageTitleInput">ImageTitle</label>
+                <textarea name="image_title" 
+                        id="imageTitleInput"
+                        rows="1"
+                        class="form-control  {{if ne (len (index .Form.Errors "image_title")) 0 }} is-invalid  {{end}}" 
+                        aria-describedby="ImageTitle"
+                        >{{$model.ImageTitle}}</textarea>
+                            
+                {{range (index .Form.Errors "image_title")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="imageInput">ThumbnailImage</label>
+                <textarea name="thumbnail_image" 
+                        id="imageInput"
+                        rows="1"
+                        class="form-control  {{if ne (len (index .Form.Errors "thumbnail_image")) 0 }} is-invalid  {{end}}" 
+                        aria-describedby="ThumbnailImage"
+                        >{{$model.ThumbnailImage}}</textarea>
+                            
+                {{range (index .Form.Errors "thumbnail_image")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="thumbnailImageAltInput">ThumbnailImageAlt</label>
+                <textarea name="thumbnail_image_alt" 
+                        id="thumbnailImageAltInput"
+                        rows="1"
+                        class="form-control  {{if ne (len (index .Form.Errors "thumbnail_image_alt")) 0 }} is-invalid  {{end}}" 
+                        aria-describedby="ThumbnailImageAlt"
+                        >{{$model.ThumbnailImageAlt}}</textarea>
+                            
+                {{range (index .Form.Errors "thumbnail_image_alt")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+
+        <div class="col-sm-5">
+            <div class="form-group">
+                <label for="thumbnailImageTitleInput">ThumbnailImageTitle</label>
+                <textarea name="thumbnail_image_title" 
+                        id="thumbnailImageTitleInput"
+                        rows="1"
+                        class="form-control  {{if ne (len (index .Form.Errors "image_title")) 0 }} is-invalid  {{end}}" 
+                        aria-describedby="ThumbnailImageTitle"
+                        >{{$model.ThumbnailImageTitle}}</textarea>
+                            
+                {{range (index .Form.Errors "thumbnail_image_title")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="call2actionNameInput">Call2actionName</label>
+                <textarea name="call2action_name" 
+                        id="call2actionNameInput"
+                        rows="1"
+                        class="form-control  {{if ne (len (index .Form.Errors "call2action_name")) 0 }} is-invalid  {{end}}" 
+                        aria-describedby="Call2actionName"
+                        >{{$model.Call2actionName}}</textarea>
+                            
+                {{range (index .Form.Errors "call2action_name")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="call2actionLinkInput">Call2actionLink</label>
+                <textarea name="call2action_link" 
+                        id="call2actionLinkInput"
+                        rows="1"
+                        class="form-control  {{if ne (len (index .Form.Errors "call2action_link")) 0 }} is-invalid  {{end}}" 
+                        aria-describedby="Call2actionLink"
+                        >{{$model.Call2actionLink}}</textarea>
+                            
+                {{range (index .Form.Errors "call2action_link")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="call2actionClassInput">Call2actionClass</label>
+                <textarea name="call2action_class" 
+                        id="call2actionClassInput"
+                        rows="1"
+                        class="form-control  {{if ne (len (index .Form.Errors "call2action_class")) 0 }} is-invalid  {{end}}" 
+                        aria-describedby="Call2actionClass"
+                        >{{$model.Call2actionClass}}</textarea>
+                            
+                {{range (index .Form.Errors "call2action_class")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-5">
+            <div class="form-group">
+                <label for="call2actionCommentInput">Call2actionComment</label>
+                <textarea name="call2action_comment" 
+                        id="call2actionCommentInput"
+                        rows="1"
+                        class="form-control  {{if ne (len (index .Form.Errors "call2action_comment")) 0 }} is-invalid  {{end}}" 
+                        aria-describedby="Call2actionComment"
+                        >{{$model.Call2actionComment}}</textarea>
+                            
+                {{range (index .Form.Errors "call2action_comment")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+
+        <div class="col-sm-7">
+            <div class="form-group">
+                <label for="call2actionDescriptionInput">Call2actionDescription</label>
+                <textarea name="call2action_description" 
+                        id="call2actionDescriptionInput"
+                        rows="1"
+                        class="form-control  {{if ne (len (index .Form.Errors "call2action_description")) 0 }} is-invalid  {{end}}" 
+                        aria-describedby="Call2actionDescription"
+                        >{{$model.Call2actionDescription}}</textarea>
+                            
+                {{range (index .Form.Errors "call2action_description")}}
+                <label class="text-danger"> {{.}}</label>
+                {{end}}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6"></div>
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="statusInput">Status</label>
@@ -185,7 +389,6 @@
                 {{end}}
             </div>
         </div>
-
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="layoutInput">Layout</label>
@@ -209,7 +412,6 @@
                 {{end}}
             </div>
         </div>
-        
     </div>
 
 

@@ -73,3 +73,6 @@ h1{
 .nl2br{
     white-space: pre-line;
 }
+.pointer {
+    cursor: pointer;
+}

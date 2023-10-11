@@ -54,13 +54,17 @@ function logout(){
     'use strict'
     const signOutButton = document.getElementById('signOutButton')
     const signInButton = document.getElementById('signInButton')
+    const adminButton = document.getElementById('adminButton')
     let authCookie = getCookie('auth')
     if (authCookie.length){
         signOutButton?.classList.remove('d-none')
         signInButton?.classList.add('d-none')
+        adminButton?.classList.remove('d-none')
     } else {
         signOutButton?.classList.add('d-none')
         signInButton?.classList.remove('d-none')
+        adminButton?.classList.add('d-none')
+
     }
    
 })();

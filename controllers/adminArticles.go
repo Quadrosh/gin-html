@@ -86,6 +86,20 @@ type adminArticleEntry struct {
 	CreatedAt       time.Time                `json:"created_at" format:"date-time"`
 	UpdatedAt       time.Time                `json:"updated_at" format:"date-time"`
 	DeletedAt       *time.Time               `json:"deleted_at" format:"date-time" `
+
+	ListName               string `json:"list_name"`
+	Excerpt                string `json:"excerpt"`
+	Image                  string `json:"image"`
+	ImageAlt               string `json:"image_alt"`
+	ImageTitle             string `json:"image_title"`
+	ThumbnailImage         string `json:"thumbnail_image"`
+	ThumbnailImageAlt      string `json:"thumbnail_image_alt"`
+	ThumbnailImageTitle    string `json:"thumbnail_image_title"`
+	Call2actionDescription string `json:"call2action_description"`
+	Call2actionName        string `json:"call2action_name"`
+	Call2actionLink        string `json:"call2action_link"`
+	Call2actionClass       string `json:"call2action_class"`
+	Call2actionComment     string `json:"call2action_comment"`
 }
 
 // AdminArticleForm  page entry form for admin
@@ -101,6 +115,20 @@ type AdminArticleForm struct {
 	Text            string                   `form:"text" `
 	Status          repository.ArticleStatus `form:"status"  binding:"required"`
 	Layout          repository.ArticleLayout `form:"layout" `
+
+	ListName               string `form:"list_name"    binding:"max_length=255"`
+	Excerpt                string `form:"excerpt"       binding:"max_length=255"`
+	Image                  string `form:"image"`
+	ImageAlt               string `form:"image_alt"    binding:"max_length=120"`
+	ImageTitle             string `form:"image_title"  binding:"max_length=255"`
+	ThumbnailImage         string `form:"thumbnail_image"`
+	ThumbnailImageAlt      string `form:"thumbnail_image_alt"   binding:"max_length=120"`
+	ThumbnailImageTitle    string `form:"thumbnail_image_title" binding:"max_length=255"`
+	Call2actionDescription string `form:"call2action_description" binding:"max_length=510"`
+	Call2actionName        string `form:"call2action_name"      binding:"max_length=255"`
+	Call2actionLink        string `form:"call2action_link"      binding:"max_length=255"`
+	Call2actionClass       string `form:"call2action_class"     binding:"max_length=255"`
+	Call2actionComment     string `form:"call2action_comment"   binding:"max_length=255"`
 
 	Errors forms.Errors
 }
@@ -121,6 +149,20 @@ func (to *adminArticleEntry) convert(r *repository.Article) error {
 	to.UpdatedAt = r.UpdatedAt
 	to.DeletedAt = r.DeletedAt
 
+	to.ListName = r.ListName
+	to.Excerpt = r.Excerpt
+	to.Image = r.Image
+	to.ImageAlt = r.ImageAlt
+	to.ImageTitle = r.ImageTitle
+	to.ThumbnailImage = r.ThumbnailImage
+	to.ThumbnailImageAlt = r.ThumbnailImageAlt
+	to.ThumbnailImageTitle = r.ThumbnailImageTitle
+	to.Call2actionDescription = r.Call2actionDescription
+	to.Call2actionName = r.Call2actionName
+	to.Call2actionLink = r.Call2actionLink
+	to.Call2actionClass = r.Call2actionClass
+	to.Call2actionComment = r.Call2actionComment
+
 	return nil
 }
 
@@ -137,6 +179,19 @@ func (to *adminArticleEntry) convertForm(r *repository.Article, f *AdminArticleF
 		to.PageDescription = f.PageDescription
 		to.Text = f.Text
 		to.Status = f.Status
+
+		to.Excerpt = f.Excerpt
+		to.Image = f.Image
+		to.ImageAlt = f.ImageAlt
+		to.ImageTitle = f.ImageTitle
+		to.ThumbnailImage = f.ThumbnailImage
+		to.ThumbnailImageAlt = f.ThumbnailImageAlt
+		to.ThumbnailImageTitle = f.ThumbnailImageTitle
+		to.Call2actionDescription = f.Call2actionDescription
+		to.Call2actionName = f.Call2actionName
+		to.Call2actionLink = f.Call2actionLink
+		to.Call2actionClass = f.Call2actionClass
+		to.Call2actionComment = f.Call2actionComment
 	} else if r != nil {
 		to.ID = r.ID
 		to.Type = r.Type
@@ -149,6 +204,19 @@ func (to *adminArticleEntry) convertForm(r *repository.Article, f *AdminArticleF
 		to.PageDescription = r.PageDescription
 		to.Text = r.Text
 		to.Status = r.Status
+
+		to.Excerpt = r.Excerpt
+		to.Image = r.Image
+		to.ImageAlt = r.ImageAlt
+		to.ImageTitle = r.ImageTitle
+		to.ThumbnailImage = r.ThumbnailImage
+		to.ThumbnailImageAlt = r.ThumbnailImageAlt
+		to.ThumbnailImageTitle = r.ThumbnailImageTitle
+		to.Call2actionDescription = r.Call2actionDescription
+		to.Call2actionName = r.Call2actionName
+		to.Call2actionLink = r.Call2actionLink
+		to.Call2actionClass = r.Call2actionClass
+		to.Call2actionComment = r.Call2actionComment
 
 	}
 
@@ -287,6 +355,19 @@ func (ctl *Controller) AdminArticleCreatePost(ctx *gin.Context) {
 	article.Layout = form.Layout
 	article.Status = form.Status
 	article.Type = form.Type
+
+	article.Excerpt = form.Excerpt
+	article.Image = form.Image
+	article.ImageAlt = form.ImageAlt
+	article.ImageTitle = form.ImageTitle
+	article.ThumbnailImage = form.ThumbnailImage
+	article.ThumbnailImageAlt = form.ThumbnailImageAlt
+	article.ThumbnailImageTitle = form.ThumbnailImageTitle
+	article.Call2actionDescription = form.Call2actionDescription
+	article.Call2actionName = form.Call2actionName
+	article.Call2actionLink = form.Call2actionLink
+	article.Call2actionClass = form.Call2actionClass
+	article.Call2actionComment = form.Call2actionComment
 
 	if err := article.Save(db); err != nil {
 		if err := ctl.SetToSession(ctx, constants.SessionKeyError, err.Error()); err != nil {
@@ -487,6 +568,19 @@ func (ctl *Controller) AdminArticleEditPost(ctx *gin.Context) {
 	article.Layout = form.Layout
 	article.Status = form.Status
 	article.Type = form.Type
+
+	article.Excerpt = form.Excerpt
+	article.Image = form.Image
+	article.ImageAlt = form.ImageAlt
+	article.ImageTitle = form.ImageTitle
+	article.ThumbnailImage = form.ThumbnailImage
+	article.ThumbnailImageAlt = form.ThumbnailImageAlt
+	article.ThumbnailImageTitle = form.ThumbnailImageTitle
+	article.Call2actionDescription = form.Call2actionDescription
+	article.Call2actionName = form.Call2actionName
+	article.Call2actionLink = form.Call2actionLink
+	article.Call2actionClass = form.Call2actionClass
+	article.Call2actionComment = form.Call2actionComment
 
 	if err := article.Save(db); err != nil {
 		if err := ctl.SetToSession(ctx, constants.SessionKeyError, err.Error()); err != nil {

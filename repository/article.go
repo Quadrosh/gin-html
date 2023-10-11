@@ -86,16 +86,29 @@ var ArticleTypeNameMap = map[ArticleType]string{
 // Article страница
 type Article struct {
 	Model
-	Type            ArticleType   `gorm:"null" json:"type" db:"type"`
-	Hrurl           string        `gorm:"size:255;null;" json:"hrurl" db:"hrurl"`
-	Title           string        `gorm:"size:255;null;" json:"title" db:"title"`
-	Description     string        `gorm:"size:255;null;" json:"description" db:"description"`
-	Keywords        string        `gorm:"size:1000;null;" json:"keywords" db:"keywords"`
-	H1              string        `gorm:"size:255;null;" json:"h1" db:"h1"`
-	PageDescription string        `gorm:"size:1000;null;" json:"page_description" db:"page_description"`
-	Text            string        `gorm:"null;" json:"text" db:"text"`
-	Status          ArticleStatus `gorm:"null" json:"status" db:"status"`
-	Layout          ArticleLayout `gorm:"null;" json:"layout" db:"layout"`
+	Type                   ArticleType   `gorm:"null" json:"type" db:"type"`
+	Hrurl                  string        `gorm:"size:255;null;" json:"hrurl" db:"hrurl"`
+	Title                  string        `gorm:"size:255;null;" json:"title" db:"title"`
+	Description            string        `gorm:"size:255;null;" json:"description" db:"description"`
+	Keywords               string        `gorm:"size:1000;null;" json:"keywords" db:"keywords"`
+	H1                     string        `gorm:"size:255;null;" json:"h1" db:"h1"`
+	PageDescription        string        `gorm:"size:1000;null;" json:"page_description" db:"page_description"`
+	Text                   string        `gorm:"null;" json:"text" db:"text"`
+	Status                 ArticleStatus `gorm:"null" json:"status" db:"status"`
+	Layout                 ArticleLayout `gorm:"null;" json:"layout" db:"layout"`
+	ListName               string        `gorm:"size:255;null;" json:"list_name" db:"list_name"`
+	Excerpt                string        `gorm:"size:255;null;" json:"excerpt" db:"excerpt"`
+	Image                  string        `gorm:"null;"          json:"image" db:"image"`
+	ImageAlt               string        `gorm:"size:120;null;" json:"image_alt" db:"image_alt"`
+	ImageTitle             string        `gorm:"size:255;null;" json:"image_title" db:"image_title"`
+	ThumbnailImage         string        `gorm:"null;"          json:"thumbnail_image" db:"thumbnail_image"`
+	ThumbnailImageAlt      string        `gorm:"size:120;null;" json:"thumbnail_image_alt" db:"thumbnail_image_alt"`
+	ThumbnailImageTitle    string        `gorm:"size:255;null;" json:"thumbnail_image_title" db:"thumbnail_image_title"`
+	Call2actionDescription string        `gorm:"size:510;null;" json:"call2action_description" db:"call2action_description"`
+	Call2actionName        string        `gorm:"size:255;null;" json:"call2action_name" db:"call2action_name"`
+	Call2actionLink        string        `gorm:"size:255;null;" json:"call2action_link" db:"call2action_link"`
+	Call2actionClass       string        `gorm:"size:255;null;" json:"call2action_class" db:"call2action_class"`
+	Call2actionComment     string        `gorm:"size:255;null;" json:"call2action_comment" db:"call2action_comment"`
 }
 
 // Articles are pages
