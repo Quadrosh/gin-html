@@ -4,3 +4,8 @@ package resources
 func DeleteSuccessful() string {
 	return "Удалено успешно"
 }
+
+// UploadSuccessful - Загружено успешно
+func UploadSuccessful() string {
+	return "Загружено успешно"
+}

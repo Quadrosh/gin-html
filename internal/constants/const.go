@@ -11,4 +11,7 @@ const (
 	SessionKeyForm          = "_sessionForm"
 
 	DefaultEntriesCount = 20
+
+	FilenameKeyThumnailImage = "thumbimage"
+	FilenameKeyImage         = "image"
 )

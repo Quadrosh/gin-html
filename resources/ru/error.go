@@ -56,3 +56,8 @@ func InvalidID() string {
 func PageNotFound() string {
 	return "Страница не найдена"
 }
+
+// UploadFailed - Ошибка загрузки
+func UploadFailed() string {
+	return "Ошибка загрузки"
+}

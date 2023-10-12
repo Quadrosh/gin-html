@@ -90,6 +90,7 @@ func InitRoutes(ctl *controllers.Controller) *gin.Engine {
 	adminRoute.GET("/article/:id/edit", ctl.AdminArticleEditPage)
 	adminRoute.POST("/article/:id/edit", ctl.AdminArticleEditPost)
 	adminRoute.GET("/article/:id/delete", ctl.AdminArticleDelete)
+	adminRoute.POST("/article/:id/upload-image", ctl.AdminArticleImageUpload)
 
 	userRoute := router.Group("/user")
 	userRoute.Use(AuthMiddleware(ctl.Db, ctl.App.ApiSecret, repository.UserRoleTypeUser, router))

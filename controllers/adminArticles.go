@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"path/filepath"
 	"strconv"
 	"time"
 
@@ -18,6 +19,7 @@ import (
 	"github.com/quadrosh/gin-html/repository"
 	resources "github.com/quadrosh/gin-html/resources/ru"
 	"github.com/quadrosh/gin-html/responses"
+	"gorm.io/gorm"
 )
 
 // AdminArticlesResponse response for adminn pages index page
@@ -650,5 +652,94 @@ func (ctl *Controller) AdminArticleDelete(ctx *gin.Context) {
 	}
 
 	ctx.Redirect(http.StatusSeeOther, "/admin/articles")
+	return
+}
+
+// AdminArticleImageUpload - Upload Article Image
+// @Summary Upload Article Image file
+// @Description Upload Article image by admin
+// @ID AdminArticleImageUpload
+// @Tags admin Article Image upload
+// @Produce  json
+// @Success 200 redirect "/admin/articles"  "Success"
+// @Router /admin/article/:id/upload-image [POST]
+func (ctl *Controller) AdminArticleImageUpload(ctx *gin.Context) {
+
+	var strID = ctx.Param("id")
+	if strID == "" {
+		ctl.ErrorJSON(ctx, errors.New(resources.InvalidID()), false)
+		return
+	}
+
+	ID, err := strconv.Atoi(strID)
+	if err != nil {
+		ctl.ErrorJSON(ctx, errors.New(err.Error()), false)
+		return
+	}
+
+	var (
+		pageURL = fmt.Sprintf("/admin/article/%s", strID)
+		db      = ctl.Db
+		article = repository.Article{}
+	)
+
+	if err = article.GetByID(db, uint32(ID)); err != nil {
+		ctl.ErrorJSON(ctx, errors.New(err.Error()), false)
+		return
+	}
+
+	file, err := ctx.FormFile("file")
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"message": resources.UploadFailed(),
+		})
+		return
+	}
+	var (
+		toProperty   = ctx.Request.Form.Get("to_model_property")
+		fileNameProp string
+		modelProp    string
+	)
+	switch toProperty {
+	case "image":
+		fileNameProp = constants.FilenameKeyImage
+		modelProp = "image"
+	case "thumbnail_image":
+		fileNameProp = constants.FilenameKeyThumnailImage
+		modelProp = "thumbnail_image"
+
+	default:
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"message": fmt.Sprintf("Unknoun model propery %s", toProperty),
+		})
+	}
+
+	var (
+		extension = filepath.Ext(file.Filename)
+		fileName  = fmt.Sprintf("article%d%s%s", ID, fileNameProp, extension)
+		imgPath   = filepath.Join(ctl.App.CWD, "static/img/uploads")
+	)
+	if err := ctx.SaveUploadedFile(file, fmt.Sprintf("%s/%s", imgPath, fileName)); err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"message": "Unable to save the file",
+		})
+		return
+	}
+
+	if err := db.Model(&repository.Article{}).
+		Where("id = ?", ID).
+		Updates(map[string]interface{}{
+			modelProp: fileName,
+		}).Error; err != nil && err != gorm.ErrRecordNotFound {
+		ctl.ErrorJSON(ctx, err, true)
+		return
+	}
+
+	if err := ctl.SetToSession(ctx, constants.SessionKeyInfo, resources.UploadSuccessful()); err != nil {
+		ctl.ErrorJSON(ctx, err, true)
+		return
+	}
+
+	ctx.Redirect(http.StatusSeeOther, pageURL)
 	return
 }

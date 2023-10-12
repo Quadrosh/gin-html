@@ -194,6 +194,30 @@
 </div>
 
 
+<h5 class="text-secondary">Image upload</h5>
+<form action="/admin/article/{{.Model.ID}}/upload-image" 
+        enctype="multipart/form-data"
+        method="POST" 
+        novalidate>
+    <input type="hidden" name="_csrf" value="{{.CSRFToken}}">
+
+    <select name="to_model_property" required style="width: 250px;"
+        id="toModelPropertySelect" 
+        type="text" 
+        class="form-control" 
+        aria-describedby="Property"
+        >
+        <option value="image" selected >image</option>
+        <option value="thumbnail_image">thumbnail image</option>
+    </select>
+
+    <div class="form-group">    
+    <input type="file" name="file" class="form-control-file" id="uploadImageInput">
+    </div>
+
+    <button type="submit">Upload Image </button>
+</form> 
+
 
 {{end}}
 
