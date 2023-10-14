@@ -255,6 +255,11 @@ func (ctl *Controller) SigninPost(ctx *gin.Context) {
 		return
 	}
 
+	if err := ctl.SetToSession(ctx, constants.SessionKeyInfo, resources.PasswordChangeSuccessful()); err != nil {
+		ctl.ErrorJSON(ctx, err, true)
+		return
+	}
+
 	responses.JsonOK(ctx, SigninResponse{
 		OkResponse:  responses.OkResponse{Success: true},
 		AccessToken: token,

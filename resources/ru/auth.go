@@ -9,3 +9,8 @@ func СantHashPassword() string {
 func SignedInSuccessful() string {
 	return "Авторизация прошла успешно"
 }
+
+// PasswordChangeSuccessful - Пароль изменен успешно, можно войти с указанным паролем
+func PasswordChangeSuccessful() string {
+	return "Пароль изменен успешно, можно войти с указанным паролем."
+}
