@@ -315,7 +315,7 @@ func (ctl *Controller) AdminArticleCreatePage(ctx *gin.Context) {
 		},
 	})
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 }
 
@@ -443,7 +443,7 @@ func (ctl *Controller) AdminArticleViewPage(ctx *gin.Context) {
 		},
 	})
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 }
 
@@ -514,7 +514,7 @@ func (ctl *Controller) AdminArticleEditPage(ctx *gin.Context) {
 		},
 	})
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 }
 
