@@ -26,3 +26,5 @@ config.env
 # misc
 makefile
 
+# vendor
+/vendor

@@ -430,6 +430,8 @@ func (ctl *Controller) AdminArticleViewPage(ctx *gin.Context) {
 
 		OkResponse: responses.OkResponse{
 			Success: true,
+			Error:   ctl.GetSessionString(ctx, constants.SessionKeyError, true),
+			Info:    ctl.GetSessionString(ctx, constants.SessionKeyInfo, true),
 		},
 
 		ArticleTypeConstMap:   repository.ArticleTypeConstMap,

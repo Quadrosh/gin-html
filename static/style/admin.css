@@ -1,3 +1,23 @@
+:root {
+    --g-blue: #4285F4;
+    --g-green: #34A853;
+    --g-yellow: #FBBC05;
+    --g-red: #EA4335;
+}
+
+.btn-primary {
+    background-color: var(--g-blue);
+}
+.btn-danger {
+    background-color: var(--g-red);
+}
+.btn-success {
+    background-color: var(--g-green);
+}
+.btn-warning {
+    background-color: var(--g-yellow);
+}
+
 .navbarLogo{
     width: 80px;
 }
