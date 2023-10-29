@@ -15,12 +15,17 @@ for (var i = 0, l = els.length; i < l; i++) {
 
 
 // Toast snackbar 
+// parent class, no init in constructor
 class Toast {
     constructor(text){
-        let toastElement = this.buildToast(text, 'bg-dark', 10000); // 'bg-success', 'bg-primary', 'bg-danger'
-        let toastWrapper = this.getOrCreateToastWrapper();
-        toastWrapper.append(toastElement);
-        this.bootstrapToast = bootstrap.Toast.getOrCreateInstance(toastElement);
+        // call it from the heirs
+        // const toastElement = this.buildToast(text, 'bg-dark', 10000); // 'bg-success', 'bg-primary', 'bg-danger'
+        // this.init(toastElement)
+    }
+    init(_toastElement){
+        const toastWrapper = this.getOrCreateToastWrapper();
+        toastWrapper.append(_toastElement);
+        this.bootstrapToast = bootstrap.Toast.getOrCreateInstance(_toastElement);
         this.show = function() {
             this.bootstrapToast.show();
         }
@@ -97,10 +102,8 @@ class Toast {
 class ToastError extends Toast {
     constructor(text){
         super()
-        let toastElement = this.buildToast(text, 'bg-danger', 10000); // 'bg-success', 'bg-primary', 'bg-danger'
-        let toastWrapper = this.getOrCreateToastWrapper();
-        toastWrapper.append(toastElement);
-        this.bootstrapToast = bootstrap.Toast.getOrCreateInstance(toastElement);
+        const toastElement = this.buildToast(text, 'bg-danger', 10000); // 'bg-success', 'bg-primary', 'bg-danger'
+        this.init(toastElement)
     }
 }
 
@@ -114,10 +117,8 @@ class ToastError extends Toast {
 class ToastInfo extends Toast{
     constructor(text){
         super()
-        let toastElement = this.buildToast(text, 'bg-primary', 6000); // 'bg-success', 'bg-primary', 'bg-danger'
-        let toastWrapper = this.getOrCreateToastWrapper();
-        toastWrapper.append(toastElement);
-        this.bootstrapToast = bootstrap.Toast.getOrCreateInstance(toastElement);
+        const toastElement = this.buildToast(text, 'bg-primary', 6000); 
+        this.init(toastElement)
     }
 }
 
