@@ -17,6 +17,18 @@
 .btn-warning {
     background-color: var(--g-yellow);
 }
+.bg-primary {
+    background-color:  var(--g-blue)!important;
+}
+.bg-danger {
+    background-color:  var(--g-red)!important;
+}
+.bg-success {
+    background-color:  var(--g-green)!important;
+}
+.bg-warning {
+    background-color:  var(--g-yellow)!important;
+}
 
 .navbarLogo{
     width: 80px;
